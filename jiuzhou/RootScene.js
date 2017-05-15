@@ -87,6 +87,20 @@ const styles = StyleSheet.create({
 });
 
 const MyApp = TabNavigator({
+        Wiki: {
+            screen: WikiScene,
+            navigationOptions: ({ navigation }) => ({
+                tabBarLabel: '百科',
+                tabBarIcon: ({ focused, tintColor }) => (
+                    <TabBarItem
+                        tintColor={tintColor}
+                        focused={focused}
+                        normalImage={require('./img/pfb_tabbar_discover@2x.png')}
+                        selectedImage={require('./img/pfb_tabbar_discover_selected@2x.png')}
+                    />
+                )
+            }),
+        },
     Home: {
         screen: HomeScene,
         navigationOptions: ({ navigation }) => ({
@@ -102,20 +116,7 @@ const MyApp = TabNavigator({
         }),
     },
 
-    Wiki: {
-        screen: WikiScene,
-        navigationOptions: ({ navigation }) => ({
-            tabBarLabel: '百科',
-            tabBarIcon: ({ focused, tintColor }) => (
-                <TabBarItem
-                    tintColor={tintColor}
-                    focused={focused}
-                    normalImage={require('./img/pfb_tabbar_discover@2x.png')}
-                    selectedImage={require('./img/pfb_tabbar_discover_selected@2x.png')}
-                />
-            )
-        }),
-    },
+
         Moments: {
             screen: MomentsScene,
             navigationOptions: ({ navigation }) => ({

@@ -22,13 +22,13 @@ if (!__DEV__) {
         error: () => {},
     };
 }
-export default class MeiTuan extends Component {
-    render() {
-        return (
-            <RootScene />
-        );
-    }
-}
-AppRegistry.registerComponent('MeiTuan', () => MeiTuan);
+// export default class MeiTuan extends Component {
+//     render() {
+//         return (
+//             <RootScene />
+//         );
+//     }
+// }
+// AppRegistry.registerComponent('MeiTuan', () => MeiTuan);
 
-// AppRegistry.registerComponent('MeiTuan', () => Navigator);
+AppRegistry.registerComponent('MeiTuan', () => Navigator);
