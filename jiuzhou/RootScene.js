@@ -104,13 +104,13 @@ const MyApp = TabNavigator({
     Home: {
         screen: HomeScene,
         navigationOptions: ({ navigation }) => ({
-            tabBarLabel: '主页',
+            tabBarLabel: '通讯录',
             tabBarIcon: ({ focused, tintColor }) => (
                 <TabBarItem
                     tintColor={tintColor}
                     focused={focused}
-                    normalImage={require('./img/pfb_tabbar_homepage@2x.png')}
-                    selectedImage={require('./img/pfb_tabbar_homepage_selected@2x.png')}
+                    normalImage={require('./img/pfb_tabbar_order@2x.png')}
+                    selectedImage={require('./img/pfb_tabbar_order_selected@2x.png')}
                 />
             )
         }),
