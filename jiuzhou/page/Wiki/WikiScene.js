@@ -109,13 +109,16 @@ export default class WikiScene extends Component {
                         />
                     }>
                     {/*标题书名*/}
+                    <Text style={{fontSize: 20,}}>九州缥缈录</Text>
+                    <Image source={require('../../img/Home/search_icon.png')} style={styles.searchIcon} />
+                    <Text style={{fontSize: 20,}}>内容简介</Text>
+                    <Text style={{fontSize: 20,}}>当这个世界都要崩溃；当星辰和阳光也熄灭，当马蹄踏过弱者的尸骨，当黑暗的血色吞噬人心，不死的鹰再次降落在草原，英雄还在哭泣，在铁铸的摇篮中成长……《九州·缥缈录》的故事就发生在这里，游牧部落内部的权力争夺激烈，青阳与东陆王朝间恩怨重重。这是乱世的英雄史诗，当古老的王朝日渐衰微，掌管着星辰命运的神秘宗教走入了政治斗争的漩涡，年轻的王朝继承者崭露出耀眼的锋芒。</Text>
+                    <Text style={{fontSize: 20,}}>作者简介</Text>
+                    <Text style={{fontSize: 20,}}>江南，男，安徽合肥人。目前的身份是作者，以及媒体经理。代表作品有《此间的少年》、《一千零一夜之死神》、《九州·缥缈录》系列、《光明皇帝》系列等。</Text>
+                    <Text style={{fontSize: 20,}}>目录</Text>
+                    <Text style={{fontSize: 20,}}>第一章 蛮荒  第二章 动陆密使 第三章 世子 第四章 青铜之血 第五章 斩狼</Text>
                     <View>
-                        <Text style={{fontSize: 20,}}>九州缥缈录</Text>
-                        <HeadingBig>九州缥缈录</HeadingBig>
-                        <Heading1>九州缥缈录</Heading1>
-                        <Heading2>九州缥缈录</Heading2>
-                        <Paragraph>九州缥缈录</Paragraph>
-                        <Tip>九州缥缈录</Tip>
+
                     </View>
                     <SpacingView />
                 </ScrollView>
