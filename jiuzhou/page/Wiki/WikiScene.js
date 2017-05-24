@@ -25,8 +25,18 @@ import DetailCell from '../../common/DetailCell';
 
 import {Paragraph,Heading1, Heading2,HeadingBig,Tip} from '../../common/Text';
 import NavigationItem from '../../common/NavigationItem';
-
-// // 获取输入框的内容inputContent
+import AV from 'leancloud-storage';
+const APP_ID = 'H1Y1tHCMNNAdvAx6EMMNNvCJ-gzGzoHsz';
+const APP_KEY = 'OhXxC9b2HhnXFlXM9KPnoi4X';
+AV.initialize(APP_ID, APP_KEY);
+let Book={
+    read: "夏日的宁州是一片间杂着无数黛黑和深灰的青绿色大陆，而天空一片淡蓝，仿佛一顶巨大的圆形帷帐，它向四周伸…高的山峰从森林的枷锁中挣脱出来，连成一串闪闪发光的珍珠。 淡青和淡紫色的云烟从浩淼的大陆上升...",
+    bookname: "九州铁浮图",
+    book: "宁州诸侯的先遣使团，暗夜之主的深藏不露，羽族城主的老谋深算，影者触须的无所不在，蛮族流寇的压境大军，…上，城中不朽的铁塔能否支撑这欲覆的天空？一个构思精巧连锁细密的故事，步步解开这惊心动魄的九连环套。", author: "潘海天，科幻作家，自1994年写作以来，曾五次获得中国科幻银河奖，代表作有《黑暗中归来》、《大角，快…》、《白雀神龟》、《龙渊阁传说》、《厌火》、《七天七夜》、《宝剑炉》、《灭云》、《向北向北向北》。",
+};
+let picture='http://ac-H1Y1tHCM.clouddn.com/6df75d13deb886f74f04.jpg';
+let search='';
+// // 获取输入框的内容inputContent   九州铁浮图
 // let inputContent = "他妈的tmdfuckk";
 //
 // // 多个敏感词，这里直接以数组的形式展示出来
@@ -50,30 +60,9 @@ import NavigationItem from '../../common/NavigationItem';
 
 export default class WikiScene extends Component {
     static navigationOptions = ({ navigation }) => ({
-        headerTitle: (
-            <TouchableOpacity style={styles.searchBar}>
-                <Image source={require('../../img/Home/search_icon.png')} style={styles.searchIcon} />
-                <Paragraph>搜索</Paragraph>
-            </TouchableOpacity>
-        ),
-        headerRight: (
-            <NavigationItem
-                icon={require('../../img/Home/icon_navigationItem_message_white@2x.png')}
-                onPress={() => {
-                }}
-            />
-        ),
-        headerLeft: (
-            <NavigationItem
-                title='杭州'
-                titleStyle={{ color: 'white' }}
-                onPress={() => {
+        header:null,
+    });
 
-                }}
-            />
-        ),
-        headerStyle: { backgroundColor: color.theme },
-    })
     state: {
         isRefreshing: boolean
     }
@@ -82,7 +71,8 @@ export default class WikiScene extends Component {
         super(props)
 
         this.state = {
-            isRefreshing: false
+            isRefreshing: false,
+            searchName:'九州缥缈录',
         }
     }
 
@@ -94,12 +84,70 @@ export default class WikiScene extends Component {
         }, 2000);
     }
 
+    searchBook(){
+        this.setState({ isRefreshing: true });
+        setTimeout(() => {
+            this.setState({ isRefreshing: false })
+        }, 10000);
+        let query = new AV.Query('Wiki');
+        query.startsWith('bookname', this.state.searchName);
+        // 以bookname查询
+        query.find().then(function (Wiki) {
+            Book=Wiki[0].attributes;
+            console.log(Book);
+            console.log(Book.picture.attributes.url);
+            picture=Book.picture.attributes.url;
 
+        }).catch(function(error) {
+            // alert(JSON.stringify(error));
+            ToastAndroid.show('搜索不到该书', ToastAndroid.SHORT);
+        });
 
+    }
+    componentDidMount() {
+
+        let query = new AV.Query('Wiki');
+        query.startsWith('bookname', '九州铁浮图');
+        // 以bookname查询
+        query.find().then(function (Wiki) {
+            Book=Wiki[0].attributes;
+            console.log(Book);
+            console.log(Book.picture.attributes.url);
+            picture=Book.picture.attributes.url;
+        }).catch(function(error) {
+            alert(JSON.stringify(error));
+        });
+
+    }
+    //监听TextInput中书名的变化
+    updateTextInputValueSearchName(newText){
+        this.setState({searchName: newText});
+    }
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: color.background }}>
-                <View style={{ position: 'absolute', width: screen.width, height: screen.height, backgroundColor: color.background }} />
+                <View style={styles.header}>
+                    <Text style={styles.title}>九州百科</Text>
+                    <Image source={require('../../img/Home/search_icon.png')} style={styles.searchIcon}/>
+                </View>
+                {/*搜索框*/}
+                <View style={styles.searchcontainer}>
+                    <View style={styles.searchBox}>
+                        <TextInput
+                            underlineColorAndroid='transparent'
+                            placeholderTextColor='#bfbfbf'
+                            placeholder='搜索书名'
+                            onChangeText={(newText) => this.updateTextInputValueSearchName(newText)}
+                            style={styles.inputText}/>
+                        <TouchableOpacity
+                            onPress={()=>this.searchBook()}
+                        >
+                        <Image source={require('../../img/Home/search_icon.png')} style={styles.searchIcon}
+                        />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
                 <ScrollView
                     refreshControl={
                         <RefreshControl
@@ -109,14 +157,16 @@ export default class WikiScene extends Component {
                         />
                     }>
                     {/*标题书名*/}
-                    <Text style={{fontSize: 20,}}>九州缥缈录</Text>
-                    <Image source={require('../../img/Home/search_icon.png')} style={styles.searchIcon} />
+                    <Text style={{fontSize: 20,}}>{Book.bookname}</Text>
+                    <Image source={{uri: picture}} style={styles.searchPicture} />
+                    {/*<Image source={Book.picture.attributes.url} style={styles.searchIcon} />*/}
+
                     <Text style={{fontSize: 20,}}>内容简介</Text>
-                    <Text style={{fontSize: 20,}}>当这个世界都要崩溃；当星辰和阳光也熄灭，当马蹄踏过弱者的尸骨，当黑暗的血色吞噬人心，不死的鹰再次降落在草原，英雄还在哭泣，在铁铸的摇篮中成长……《九州·缥缈录》的故事就发生在这里，游牧部落内部的权力争夺激烈，青阳与东陆王朝间恩怨重重。这是乱世的英雄史诗，当古老的王朝日渐衰微，掌管着星辰命运的神秘宗教走入了政治斗争的漩涡，年轻的王朝继承者崭露出耀眼的锋芒。</Text>
+                    <Text style={{fontSize: 20,}}>{Book.book}</Text>
                     <Text style={{fontSize: 20,}}>作者简介</Text>
-                    <Text style={{fontSize: 20,}}>江南，男，安徽合肥人。目前的身份是作者，以及媒体经理。代表作品有《此间的少年》、《一千零一夜之死神》、《九州·缥缈录》系列、《光明皇帝》系列等。</Text>
-                    <Text style={{fontSize: 20,}}>目录</Text>
-                    <Text style={{fontSize: 20,}}>第一章 蛮荒  第二章 动陆密使 第三章 世子 第四章 青铜之血 第五章 斩狼</Text>
+                    <Text style={{fontSize: 20,}}>{Book.author}</Text>
+                    <Text style={{fontSize: 20,}}>试读</Text>
+                    <Text style={{fontSize: 20,}}>{Book.read}</Text>
                     <View>
 
                     </View>
@@ -175,18 +225,25 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white',
+        backgroundColor: 'red',
         alignSelf: 'center',
     },
     searchIcon: {
         width: 20,
         height: 20,
+        marginRight:20,
+        marginTop:7
+
+    },
+    searchPicture: {
+        width: 80,
+        height: 80,
         margin: 5,
     },
-    header: {
-        backgroundColor: color.theme,
-        paddingBottom: 20
-    },
+    // header: {
+    //     backgroundColor: color.theme,
+    //     paddingBottom: 20
+    // },
     icon: {
         width: 27,
         height: 27,
@@ -203,5 +260,56 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         borderWidth: 2,
         borderColor: '#51D3C6'
-    }
+    },
+    ItemTextInput:{
+        flex:1,
+        flexDirection:'row',
+        height:44,
+        textAlign:'center'
+    },
+    title: {
+        fontSize:16,
+        textAlign:'center',
+        color:'white',
+    },
+    header: {
+        width:window.width,
+        height: 44,
+        backgroundColor: color.theme,
+        flexDirection:'row',
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    searchBox: {
+        borderRadius: 5,  // 设置圆角边
+        flex:1,
+        flexDirection: 'row',
+        backgroundColor: 'white',
+        marginLeft: 5,
+        marginRight: 5,
+    },
+    inputText: {
+        flex: 1,
+        backgroundColor: 'transparent',
+        height:36,
+        flexDirection:'row',
+        textAlign:'center',
+        marginLeft:40
+
+    },
+    search: {
+        height: 44,
+        flexDirection:'row',
+        justifyContent:'space-around',
+        alignItems:'center',
+    },
+    searchcontainer: {
+        width:window.width,
+        flexDirection: 'row',   // 水平排布
+        height:44,
+        paddingLeft: 5,
+        paddingRight: 5,
+        backgroundColor: '#ECEDF1',
+        alignItems: 'center'  // 使元素垂直居中排布, 当flexDirection为column时, 为水平居中
+    },
 });
