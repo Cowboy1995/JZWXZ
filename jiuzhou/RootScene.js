@@ -165,13 +165,15 @@ const MyApp = TabNavigator({
 
 const Navigator = StackNavigator(
     {
-        MyApp:{ screen:MyApp },
+
         Home:{ screen:YinDao },
         Login:{ screen:Login },
         Register:{ screen:Register },
         SMSLogin:{ screen:SMSLogin },
         SetPassword:{ screen:SetPassword },
         NewWiki:{ screen:NewWiki },
+
+        MyApp:{ screen:MyApp },
 
         // Tab: { screen: Tab },
 

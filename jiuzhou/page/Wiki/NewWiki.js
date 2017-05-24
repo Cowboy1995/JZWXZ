@@ -18,11 +18,12 @@ import {
 }from 'react-native';
 import screen from '../../common/screen';
 import color from '../../common/color';
+
 import RefreshListView from '../../common/RefreshListView';
 import RefreshState from '../../common/RefreshState';
 import SpacingView from '../../common/SpacingView';
 import DetailCell from '../../common/DetailCell';
-
+import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 import {Paragraph,Heading1, Heading2,HeadingBig,Tip} from '../../common/Text';
 import NavigationItem from '../../common/NavigationItem';
 import AV from 'leancloud-storage';
@@ -31,5 +32,280 @@ const APP_KEY = 'OhXxC9b2HhnXFlXM9KPnoi4X';
 AV.initialize(APP_ID, APP_KEY);
 
 export default class NewWiki extends Component{
+    static navigationOptions = ({ navigation }) => ({
+        headerTitle: '新建百科',
+        headerStyle: { backgroundColor: 'white' ,height:44},
+        headerRight: (
+            <NavigationItem
+                icon={require('../../img/Public/icon_navigationItem_share@2x.png')}
+                onPress={() => {
+
+                }}
+            />
+        ),
+    })
+
+    state: {
+        isRefreshing: boolean
+    }
+
+    constructor(props: Object) {
+        super(props)
+
+        this.state = {
+            isRefreshing: false,
+            bookname:'',
+            book:'',
+            author:'',
+            read:'',
+            owner:'',
+
+        }
+    }
+
+    onHeaderRefresh() {
+        this.setState({ isRefreshing: true })
+
+        setTimeout(() => {
+            this.setState({ isRefreshing: false })
+        }, 2000);
+    }
+    //
+    //
+    submit(){
+        this.setState({ isRefreshing: true });
+        setTimeout(() => {
+            this.setState({ isRefreshing: false })
+        }, 10000);
+        let Wiki = AV.Object.extend('Wiki');
+        let wiki = new Wiki();
+        wiki.set('bookname', this.state.bookname);
+        wiki.set('book', this.state.book);
+        wiki.set('author', this.state.author);
+        wiki.set('owner', AV.User.currentAsync());
+        wiki.set('read', this.state.read);
+        wiki.save().then(function() {
+            //  发布成功，跳转到商品 list 页面
+        }, function(error) {
+            alert(JSON.stringify(error));
+        });
+
+    }
+    // //监听TextInput中书名的变化
+    updateTextInputValuebookname(newText){
+        this.setState({bookname: newText});
+    }
+    updateTextInputValuebook(newText){
+        this.setState({book: newText});
+    }
+    updateTextInputValueauthor(newText){
+        this.setState({author: newText});
+    }
+    updateTextInputValueread(newText){
+        this.setState({read: newText});
+    }
+    // componentDidMount() {
+    //
+    // }
+    render() {
+        return (
+       <View style={{ flex: 1, backgroundColor: color.background }}>
+           <ScrollView
+               refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.isRefreshing}
+                            onRefresh={() => this.onHeaderRefresh()}
+                            tintColor='gray'
+                        />
+                    }>
+               <Text style={{fontSize: 20,}}>书名</Text>
+               <AutoGrowingTextInput
+                   underlineColorAndroid='transparent'
+                   style={styles.textInput}
+                   placeholder={'请输入书名'}
+                   maxHeight={200}
+                   onChangeText={(newText) => this.updateTextInputValuebookname(newText)}
+
+               />
+
+               <Text style={{fontSize: 20,}}>内容简介</Text>
+               <AutoGrowingTextInput
+                   underlineColorAndroid='transparent'
+                   style={styles.textInput}
+                   placeholder={'请输入内容简介'}
+                   maxHeight={200}
+                   onChangeText={(newText) => this.updateTextInputValuebook(newText)}
+
+               />
+
+               <Text style={{fontSize: 20,}}>作者简介</Text>
+               <AutoGrowingTextInput
+                   underlineColorAndroid='transparent'
+                   style={styles.textInput}
+                   placeholder={'请输入作者简介'}
+                   maxHeight={200}
+                   onChangeText={(newText) => this.updateTextInputValueauthor(newText)}
+
+               />
+
+               <Text style={{fontSize: 20,}}>试读</Text>
+               <AutoGrowingTextInput
+                   underlineColorAndroid='transparent'
+                   style={styles.textInput}
+                   placeholder={'请输入试读内容'}
+                   maxHeight={200}
+                   onChangeText={(newText) => this.updateTextInputValueread(newText)}
+
+               />
+               <View style={styles.ItemViewButtom}>
+                   <TouchableOpacity style={styles.loginView} onPress={()=>this.submit()} >
+                       <Text style={styles.loginbutton}>{"提交"}</Text>
+                   </TouchableOpacity>
+               </View>
+
+               <SpacingView />
+           </ScrollView>
+       </View>
+        );
+    }
 
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: color.background
+    },
+    recommendHeader: {
+        height: 35,
+        justifyContent: 'center',
+        borderWidth: screen.onePixel,
+        borderColor: color.border,
+        paddingVertical: 8,
+        paddingLeft: 20,
+        backgroundColor: 'white'
+    },
+    searchBar: {
+        width: screen.width * 0.7,
+        height: 30,
+        borderRadius: 19,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'red',
+        alignSelf: 'center',
+    },
+    searchIcon: {
+        width: 20,
+        height: 20,
+        marginRight:20,
+        marginTop:7
+
+    },
+    searchPicture: {
+        width: 80,
+        height: 80,
+        margin: 5,
+    },
+    // header: {
+    //     backgroundColor: color.theme,
+    //     paddingBottom: 20
+    // },
+    icon: {
+        width: 27,
+        height: 27,
+    },
+    userContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        margin: 10,
+    },
+    avatar: {
+        width: 50,
+        height: 50,
+        marginRight: 10,
+        borderRadius: 25,
+        borderWidth: 2,
+        borderColor: '#51D3C6'
+    },
+    ItemTextInput:{
+        flex:1,
+        flexDirection:'row',
+        height:44,
+        textAlign:'center'
+    },
+    title: {
+        fontSize:16,
+        textAlign:'center',
+        color:'white',
+    },
+    header: {
+        width:window.width,
+        height: 44,
+        backgroundColor: color.theme,
+        flexDirection:'row',
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    searchBox: {
+        borderRadius: 5,  // 设置圆角边
+        flex:1,
+        flexDirection: 'row',
+        backgroundColor: 'white',
+        marginLeft: 5,
+        marginRight: 5,
+    },
+    inputText: {
+        flex: 1,
+        backgroundColor: 'transparent',
+        height:36,
+        flexDirection:'row',
+        textAlign:'center',
+        marginLeft:40
+
+    },
+    search: {
+        height: 44,
+        flexDirection:'row',
+        justifyContent:'space-around',
+        alignItems:'center',
+    },
+    searchcontainer: {
+        width:window.width,
+        flexDirection: 'row',   // 水平排布
+        height:44,
+        paddingLeft: 5,
+        paddingRight: 5,
+        backgroundColor: '#ECEDF1',
+        alignItems: 'center'  // 使元素垂直居中排布, 当flexDirection为column时, 为水平居中
+    },
+    textInput: {
+        flex: 1,
+        borderColor: '#ddd',
+        borderWidth: 1,
+        padding: 4,
+        height: 30,
+        fontSize: 13,
+        marginRight: 8,
+    },
+    loginbutton:{
+        fontSize: 15,
+        color: 'white',
+    },
+    loginView:{
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor:'#06C1AE',
+        marginTop:10,
+        height:44,
+        width:screen.width-20,
+        borderRadius:5,
+    },
+    ItemViewButtom:{
+        flexDirection:'row',
+        justifyContent:'space-around',
+        alignItems:'center',
+        backgroundColor:'#ECEDF1',
+        marginTop:10,
+    },
+});

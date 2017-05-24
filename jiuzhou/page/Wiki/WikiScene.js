@@ -124,11 +124,17 @@ export default class WikiScene extends Component {
         this.setState({searchName: newText});
     }
     render() {
+        const { navigate } = this.props.navigation;
         return (
             <View style={{ flex: 1, backgroundColor: color.background }}>
                 <View style={styles.header}>
                     <Text style={styles.title}>九州百科</Text>
-                    <Image source={require('../../img/Home/search_icon.png')} style={styles.searchIcon}/>
+                    <TouchableOpacity
+                        onPress={() => navigate('NewWiki')}
+                    >
+                        <Image source={require('../../img/xinjian.png')} style={styles.searchIcon}
+                        />
+                    </TouchableOpacity>
                 </View>
                 {/*搜索框*/}
                 <View style={styles.searchcontainer}>
@@ -175,31 +181,6 @@ export default class WikiScene extends Component {
             </View>
         );
     }
-
-    // getDataList() {
-    //     return (
-    //         [
-    //             [
-    //                 { title: '我的钱包', subtitle: '办信用卡', image: require('../../img/Mine/icon_mine_wallet@2x.png') },
-    //                 { title: '余额', subtitle: '￥95872385', image: require('../../img/Mine/icon_mine_balance@2x.png') },
-    //                 { title: '抵用券', subtitle: '63', image: require('../../img/Mine/icon_mine_voucher@2x.png') },
-    //                 { title: '会员卡', subtitle: '2', image: require('../../img/Mine/icon_mine_membercard@2x.png') }
-    //             ],
-    //             [
-    //                 { title: '好友去哪', image: require('../../img/Mine/icon_mine_friends@2x.png') },
-    //                 { title: '我的评价', image: require('../../img/Mine/icon_mine_comment@2x.png') },
-    //                 { title: '我的收藏', image: require('../../img/Mine/icon_mine_collection@2x.png') },
-    //                 { title: '会员中心', subtitle: 'v15', image: require('../../img/Mine/icon_mine_membercenter@2x.png') },
-    //                 { title: '积分商城', subtitle: '好礼已上线', image: require('../../img/Mine/icon_mine_member@2x.png') }
-    //             ],
-    //             [
-    //                 { title: '客服中心', image: require('../../img/Mine/icon_mine_customerService@2x.png') },
-    //                 { title: '关于美团', subtitle: '我要合作', image: require('../../img/Mine/icon_mine_aboutmeituan@2x.png') }
-    //             ]
-    //         ]
-    //     )
-    // }
-
 
 
 }
