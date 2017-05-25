@@ -97,7 +97,6 @@ export default class WikiScene extends Component {
             console.log(Book);
             console.log(Book.picture.attributes.url);
             picture=Book.picture.attributes.url;
-
         }).catch(function(error) {
             // alert(JSON.stringify(error));
             ToastAndroid.show('搜索不到该书', ToastAndroid.SHORT);

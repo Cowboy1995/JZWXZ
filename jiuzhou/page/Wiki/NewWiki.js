@@ -78,16 +78,25 @@ export default class NewWiki extends Component{
             this.setState({ isRefreshing: false })
         }, 10000);
         let Wiki = AV.Object.extend('Wiki');
+        // AV.Object.extend('className') 所需的参数 className 则表示对应的表名
+        // 声明一个类型
         let wiki = new Wiki();
+        // 新建对象
         wiki.set('bookname', this.state.bookname);
+        // 设置书名
         wiki.set('book', this.state.book);
+        // 设置内容简介
         wiki.set('author', this.state.author);
+        // 设置作者简介
         wiki.set('owner', AV.User.currentAsync());
+        // 设置百科创建者
         wiki.set('read', this.state.read);
+        // 设置试读
         wiki.save().then(function() {
-            //  发布成功，跳转到商品 list 页面
+            // 保存成功
         }, function(error) {
             alert(JSON.stringify(error));
+            //保存失败
         });
 
     }

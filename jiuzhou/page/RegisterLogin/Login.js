@@ -41,17 +41,22 @@ export default class Login extends Component {
     JumpMainScreen=()=> {
         const { navigate } = this.props.navigation;
         // navigate('MyApp');
-
         if(this.state.USERNAME.length===0){
             ToastAndroid.show('请输入用户名', ToastAndroid.SHORT);
+            //判断用户名是否为空，为空提示用户输入用户名
         }else if(this.state.PASSWORD.length===0){
             ToastAndroid.show('请输入密码', ToastAndroid.SHORT);
+            //判断密码是否为空，为空提示用户输入密码
         }else {
             AV.User.logIn(this.state.USERNAME, this.state.PASSWORD).then(function (loginedUser) {
+                //调用AV.User.logIn方法进行帐号密码登陆
                 navigate('MyApp');
+                //登陆成功跳转到主页面
+                ToastAndroid.show('登陆成功', ToastAndroid.SHORT);
             }, function (error) {
+                ToastAndroid.show(error, ToastAndroid.SHORT);
+                //登陆失败返回帐号或密码错误
             });
-
         }
     };
 

@@ -63,21 +63,29 @@ export default class Register extends Component {
     _sendMessage=()=>{
         if(this.state.USERNAME.length===0){
             ToastAndroid.show('请输入用户名', ToastAndroid.SHORT);
+            //判断用户名是否为空，为空提示用户输入用户名
         }else if(this.state.PASSWORD.length===0){
             ToastAndroid.show('请输入密码', ToastAndroid.SHORT);
+            //判断密码是否为空，为空提示用户输入密码
         }else if(this.state.phone.length===0){
             ToastAndroid.show('请输入手机号', ToastAndroid.SHORT);
+            //判断手机号是否为空，为空提示用户输入手机号
         }else if(this.state.phone.length!==11){
             ToastAndroid.show('请输入正确的手机号', ToastAndroid.SHORT);
+            //判断手机号是否为11位，为空提示用户输入正确的手机号
         }else{
             this.setState({
                 disabled: true,
             });
             let user = new AV.User();
             user.set("username", this.state.USERNAME);
+            //设置用户名
             user.set("password", this.state.PASSWORD);
+            //设置密码
             user.setMobilePhoneNumber(this.state.phone);
+            //设置电话
             user.signUp();
+            //注册
             this.timer=setTimeout(()=>{ this.setState({disabled: false})},60000);
             this.timer1=setInterval(()=>{
                 this.setState({Time:this.state.Time-1});
@@ -86,7 +94,7 @@ export default class Register extends Component {
                     this.timer1 && clearInterval(this.timer1);
                 }
             },1000);
-
+            //获取验证码按钮点击后禁用，倒计时60秒后可重新获取
         }
 
     };
@@ -96,18 +104,24 @@ export default class Register extends Component {
         const  navigation = this.props.navigation;
         if(this.state.USERNAME.length===0){
             ToastAndroid.show('请输入用户名', ToastAndroid.SHORT);
+            //判断用户名是否为空，为空提示用户输入用户名
         }else if (this.state.PASSWORD.length===0){
             ToastAndroid.show('请输入密码', ToastAndroid.SHORT);
+            //判断密码是否为空，为空提示用户输入密码
         }else if (this.state.phone.length===0){
             ToastAndroid.show('请输入手机号', ToastAndroid.SHORT);
+            //判断手机号是否为空，为空提示用户输入手机号
         }else if (this.state.phone.length!==11){
             ToastAndroid.show('请输入正确的手机号', ToastAndroid.SHORT);
+            //判断手机号是否为11位，为空提示用户输入正确的手机号
         }else if (this.state.check.length === 0){
             ToastAndroid.show('请输入验证码', ToastAndroid.SHORT);
+            //判断验证码是否为空，为空提示用户输入验证码
         }else {
             AV.User.verifyMobilePhone(this.state.check).then(function(){
+                //调用AV.User.verifyMobilePhone验证短信
                 navigation.goBack();
-                //验证成功
+                //验证成功返回登陆页面
             }, function(err){
                 //验证失败
             });

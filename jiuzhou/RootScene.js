@@ -32,7 +32,7 @@ import Register from './page/RegisterLogin/Register';
 import SMSLogin from './page/RegisterLogin/SMSLogin';
 import SetPassword from './page/RegisterLogin/SetPassword';
 
-import HomeScene from './page/Home/HomeScene';
+import HomeScene from './page/Contact/ContactScene';
 import WikiScene from './page/Wiki/WikiScene';
 import NewWiki from './page/Wiki/NewWiki';
 

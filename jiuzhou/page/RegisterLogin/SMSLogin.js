@@ -57,14 +57,18 @@ export default class SMSLogin extends Component {
     _sendMessage=()=>{
         if(this.state.phone.length===0){
             ToastAndroid.show('请输入手机号', ToastAndroid.SHORT);
+            //判断手机号是否为空，为空提示用户输入手机号
         }else if(this.state.phone.length!==11){
             ToastAndroid.show('请输入正确的手机号', ToastAndroid.SHORT);
+            //判断手机号是否为11位，为空提示用户输入正确的手机号
         }else{
             this.setState({
                 disabled: true,
             });
             AV.User.requestLoginSmsCode(this.state.phone).then(function (success) {
+                //调用AV.User.requestLoginSmsCode方法短信验证登陆成功
             }, function (error) {
+                //验证失败
             });
             this.timer=setTimeout(()=>{ this.setState({disabled: false})},60000);
             this.timer1=setInterval(()=>{
@@ -74,7 +78,7 @@ export default class SMSLogin extends Component {
                     this.timer1 && clearInterval(this.timer1);
                 }
             },1000);
-
+            //获取验证码按钮点击后禁用，倒计时60秒后可重新获取
         }
 
     };
@@ -84,14 +88,20 @@ export default class SMSLogin extends Component {
         const { navigate } = this.props.navigation;
         if (this.state.phone.length===0){
             ToastAndroid.show('请输入手机号', ToastAndroid.SHORT);
+            //判断手机号是否为空，为空提示用户输入手机号
         }else if (this.state.phone.length!==11){
             ToastAndroid.show('请输入正确的手机号', ToastAndroid.SHORT);
+            //判断手机号是否为11位，为空提示用户输入正确的手机号
         }else if (this.state.check.length === 0){
             ToastAndroid.show('请输入验证码', ToastAndroid.SHORT);
+            //判断验证码是否为空，为空提示用户输入验证码
         }else {
             AV.User.logInWithMobilePhoneSmsCode(this.state.phone, this.state.check).then(function (loginedUser) {
+                //调用AV.User.logInWithMobilePhoneSmsCode方法手机号登陆
                 navigate('MyApp');
+                //登陆成功跳转到主页面
             }, function (error) {
+                //登陆失败
             });
         }
     };

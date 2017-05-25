@@ -68,13 +68,16 @@ export default class SetPassword extends Component {
     _sendMessage=()=>{
         if(this.state.phone.length===0){
             ToastAndroid.show('请输入手机号', ToastAndroid.SHORT);
+            //判断手机号是否为空，为空提示用户输入手机号
         }else if(this.state.phone.length!==11){
             ToastAndroid.show('请输入正确的手机号', ToastAndroid.SHORT);
+            //判断手机号是否为11位，为空提示用户输入正确的手机号
         }else{
             this.setState({
                 disabled: true,
             });
             AV.User.requestPasswordResetBySmsCode(this.state.phone).then(function (success) {
+                //调用AV.User.requestPasswordResetBySmsCode方法获取验证码
             }, function (error) {
             });
             this.timer=setTimeout(()=>{ this.setState({disabled: false})},60000);
@@ -85,6 +88,7 @@ export default class SetPassword extends Component {
                     this.timer1 && clearInterval(this.timer1);
                 }
             },1000);
+            //获取验证码按钮点击后禁用，倒计时60秒后可重新获取
 
         }
 
@@ -95,20 +99,26 @@ export default class SetPassword extends Component {
         const navigation = this.props.navigation;
         if (this.state.PASSWORD===0){
             ToastAndroid.show('请输入新密码！', ToastAndroid.SHORT);
+            //判断密码是否为空，为空提示用户输入密码
         }else if(this.state.PASSWORD.length<6){
             ToastAndroid.show('密码长度至少六位', ToastAndroid.SHORT);
+            //判断密码长度是否大于等于六位，为空提示用户密码长度至少六位
         }else if(this.state.NEWPASSWORD===0){
             ToastAndroid.show('请确认新密码！', ToastAndroid.SHORT);
+            //判断密码是否为空，为空提示用户输入密码
         }
         else if(this.state.PASSWORD!==this.state.NEWPASSWORD){
             ToastAndroid.show('两次输入的密码不一致！', ToastAndroid.SHORT);
+            //判断两次输入的密码是否一致，不一致则提醒用户
         }
         else if (this.state.check.length === 0){
             ToastAndroid.show('请输入验证码', ToastAndroid.SHORT);
+            //判断验证码是否为空，为空提示用户输入验证码
         }else {
-
             AV.User.resetPasswordBySmsCode(this.state.check, this.state.NEWPASSWORD).then(function (success) {
+                //调用AV.User.resetPasswordBySmsCode方法验证验证码并设置新密码
                 navigation.goBack();
+                //设置成功返回登陆页面
             }, function (error) {
             });
         }
