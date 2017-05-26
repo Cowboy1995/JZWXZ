@@ -42,11 +42,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: 10,
-        height: 100,
-    },
+        height: 60,
+        backgroundColor: 'white',
+},
     img: {
-        width: 90,
-        height: 90,
+        width: 55,
+        height: 55,
     },
     content: {
 
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: StyleSheet.hairlineWidth,
-        borderColor: '#000',
+        borderColor: 'white',
     },
     buttonText: {
 

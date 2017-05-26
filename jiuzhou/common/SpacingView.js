@@ -25,7 +25,7 @@ class SpacingView extends Component {
 // define your styles
 const styles = StyleSheet.create({
     container: {
-        height: 14,
+        height: 5,
         backgroundColor: color.background,
     },
 });

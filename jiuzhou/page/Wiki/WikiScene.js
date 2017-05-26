@@ -73,6 +73,8 @@ export default class WikiScene extends Component {
         this.state = {
             isRefreshing: false,
             searchName:'九州缥缈录',
+            show:false,
+            value:null,
         }
     }
 
@@ -103,6 +105,12 @@ export default class WikiScene extends Component {
         });
 
     }
+    hiden(value){
+        this.setState({
+            show:false,
+            value:value,
+        })
+    }
     componentDidMount() {
 
 
@@ -121,7 +129,11 @@ export default class WikiScene extends Component {
     }
     //监听TextInput中书名的变化
     updateTextInputValueSearchName(newText){
-        this.setState({searchName: newText});
+        this.setState({
+            searchName: newText,
+            show:true,
+            value:newText
+        });
     }
     render() {
         const { navigate } = this.props.navigation;
@@ -140,6 +152,7 @@ export default class WikiScene extends Component {
                 <View style={styles.searchcontainer}>
                     <View style={styles.searchBox}>
                         <TextInput
+                            value={this.state.value}
                             underlineColorAndroid='transparent'
                             placeholderTextColor='#bfbfbf'
                             placeholder='搜索书名'
@@ -153,6 +166,14 @@ export default class WikiScene extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
+                {this.state.show?
+                    <View>
+                        <Text onPress={()=>this.hiden(this.state.value+'州缥缈录')}>
+                            {this.state.value+'州缥缈录'}
+                        </Text>
+                    </View>
+                    :null
+                }
 
                 <ScrollView
                     refreshControl={
@@ -274,8 +295,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         height:36,
         flexDirection:'row',
-        textAlign:'center',
-        marginLeft:40
+        // textAlign:'center',
+        // marginLeft:40
 
     },
     search: {

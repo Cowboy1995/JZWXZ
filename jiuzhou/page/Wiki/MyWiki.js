@@ -17,11 +17,13 @@ import {
     Button,
     ListView,
     ScrollView,
-    RefreshControl
+    RefreshControl,
+    TouchableWithoutFeedback
 }from 'react-native';
 import screen from '../../common/screen';
 import color from '../../common/color';
 import Item from '../../common/Item';
+import Swipeout from 'react-native-swipeout';
 
 import RefreshListView from '../../common/RefreshListView';
 import RefreshState from '../../common/RefreshState';
@@ -40,6 +42,21 @@ let details = [
     // {title:'交通',date:'2016.02.23',money:'65'},
     // {title:'住宿',date:'2016.02.24',money:'25'},
 ];
+
+// let rows=[
+//     {
+//         text: "onPress Callback",
+//         right: [
+//
+//             {
+//                 text: 'Press Me',
+//                 onPress: function(){ alert('button pressed') },
+//                 type: 'primary',
+//                 backgroundColor: '#4fba8a',
+//             }
+//         ],
+//     }
+// ];
 
 
 export default class MyWiki extends Component {
@@ -66,32 +83,6 @@ export default class MyWiki extends Component {
         setTimeout(() => {
             this.setState({ isRefreshing: false })
         }, 2000);
-    }
-
-    searchBook(){
-        this.setState({ isRefreshing: true });
-        setTimeout(() => {
-            this.setState({ isRefreshing: false })
-        }, 10000);
-        let query = new AV.Query('Wiki');
-        query.startsWith('bookname', this.state.searchName);
-        // 以bookname查询
-        query.find().then(function (Wiki) {
-            Book=Wiki[0].attributes;
-            console.log(Book);
-            console.log(Book.picture.attributes.url);
-            picture=Book.picture.attributes.url;
-        }).catch(function(error) {
-            // alert(JSON.stringify(error));
-            ToastAndroid.show('搜索不到该书', ToastAndroid.SHORT);
-        });
-
-    }
-    componentDidMount() {
-        this.setState({ isRefreshing: true });
-        setTimeout(() => {
-            this.setState({ isRefreshing: false })
-        }, 10000);
         Tong.load({
             key:'User',
             autoSync: true,
@@ -100,10 +91,6 @@ export default class MyWiki extends Component {
             console.log(ret.id);
             let query = new AV.Query('Wiki');
             query.startsWith('ids', ret.id);
-            // query.contains('ids',ret.id);
-            // query.include('owner');
-            // query.include('picture');
-            // query.descending('createdAt');
             query.find().then(function (products) {
                 console.log(products);
                 details=products;
@@ -122,41 +109,82 @@ export default class MyWiki extends Component {
                     break;
             }
         });
+    }
 
-
-        // let query = new AV.Query('Wiki');
-        // query.startsWith('bookname', '九州铁浮图');
-        // // 以bookname查询
-        // query.find().then(function (Wiki) {
-        //     Book=Wiki[0].attributes;
-        //     console.log(Book);
-        //     console.log(Book.picture.attributes.url);
-        //     picture=Book.picture.attributes.url;
-        // }).catch(function(error) {
-        //     alert(JSON.stringify(error));
-        // });
-
+    searchBook(){
+    }
+    componentDidMount() {
+        this.setState({ isRefreshing: true });
+        setTimeout(() => {
+            this.setState({ isRefreshing: false })
+        }, 10000);
+        Tong.load({
+            key:'User',
+            autoSync: true,
+            syncInBackground: true
+        }).then(ret => {
+            console.log(ret.id);
+            let query = new AV.Query('Wiki');
+            query.startsWith('ids', ret.id);
+            query.find().then(function (products) {
+                console.log(products);
+                details=products;
+                // 查询到商品后，在前端展示到相应的位置中。
+            }).catch(function(error) {
+                alert(JSON.stringify(error));
+            });
+        }).catch(err => {
+            console.warn(err.message);
+            switch (err.name) {
+                case 'NotFoundError':
+                    // TODO;
+                    break;
+                case 'ExpiredError':
+                    // TODO
+                    break;
+            }
+        });
     }
     //监听TextInput中书名的变化
     updateTextInputValueSearchName(newText){
         this.setState({searchName: newText});
     }
 
-    renderExpenseItem(item , i){
-        return <Text>i</Text>
-    }
     render() {
         const { navigate } = this.props.navigation;
+        let swipeoutBtns = [
+
+            {
+                text: '修改',
+                type: 'primary',
+                onPress: function(){
+                    // this.setState({ isRefreshing: true });
+                    // setTimeout(() => {
+                    //     this.setState({ isRefreshing: false })
+                    // }, 2000);
+                    alert(1111)
+
+                },
+            },
+            {
+                text: '删除',
+                type: 'delete',
+                onPress: function(){
+                    let todo = AV.Object.createWithoutData('Wiki', '5928454aa0bb9f0057dac94c');
+                    todo.destroy().then(function (success) {
+
+                        // 删除成功
+                    }, function (error) {
+                        alert(error);
+                        // 删除失败
+                    });
+                },
+            }
+        ]
         return (
             <View style={{ flex: 1, backgroundColor: color.background }}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>九州百科</Text>
-                    <TouchableOpacity
-                        onPress={() => navigate('NewWiki')}
-                    >
-                        <Image source={require('../../img/xinjian.png')} style={styles.searchIcon}
-                        />
-                    </TouchableOpacity>
+                    <Text style={styles.title}>我的百科</Text>
                 </View>
                 {/*搜索框*/}
                 <View style={styles.searchcontainer}>
@@ -175,6 +203,7 @@ export default class MyWiki extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
+                <View style={{height:10}}/>
 
                 <ScrollView
                     refreshControl={
@@ -184,11 +213,29 @@ export default class MyWiki extends Component {
                             tintColor='gray'
                         />
                     }>
+
                     {
                         details.map((data,index)=>{
-                            return <Item key={data.id} index={index} data={data}  />
+                            return(
+                                <View>
+                                    <Swipeout right={swipeoutBtns} index={index}>
+                                        <View>
+                                            <Item key={data.id} index={index} data={data}  />
+                                        </View>
+                                    </Swipeout>
+                                    <SpacingView />
+                                </View>
+                            )
                         })
                     }
+                    {this.state.isRefreshing?null:<View style={styles.ItemViewButtom}>
+                            <TouchableOpacity style={styles.loginView} onPress={()=>navigate('NewWiki')}>
+                                <Text style={styles.loginbutton}>{"新建百科"}</Text>
+                            </TouchableOpacity>
+                        </View>}
+                    {
+                    }
+
                 </ScrollView>
             </View>
         );
@@ -304,5 +351,24 @@ const styles = StyleSheet.create({
         paddingRight: 5,
         backgroundColor: '#ECEDF1',
         alignItems: 'center'  // 使元素垂直居中排布, 当flexDirection为column时, 为水平居中
+    },
+    loginbutton:{
+        color:'white'
+    },
+    ItemViewButtom:{
+        flexDirection:'row',
+        justifyContent:'space-around',
+        alignItems:'center',
+        backgroundColor:'#ECEDF1',
+        marginTop:10,
+    },
+    loginView:{
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor:'#06C1AE',
+        marginTop:10,
+        height:44,
+        width:screen.width-20,
+        borderRadius:5,
     },
 });
