@@ -21,6 +21,8 @@ import {
 }from 'react-native';
 import screen from '../../common/screen';
 import color from '../../common/color';
+import Item from '../../common/Item';
+
 import RefreshListView from '../../common/RefreshListView';
 import RefreshState from '../../common/RefreshState';
 import SpacingView from '../../common/SpacingView';
@@ -33,6 +35,11 @@ const APP_ID = 'H1Y1tHCMNNAdvAx6EMMNNvCJ-gzGzoHsz';
 const APP_KEY = 'OhXxC9b2HhnXFlXM9KPnoi4X';
 AV.initialize(APP_ID, APP_KEY);
 
+let details = [
+    // {title:'长途',date:'2016.02.22',money:'332'},
+    // {title:'交通',date:'2016.02.23',money:'65'},
+    // {title:'住宿',date:'2016.02.24',money:'25'},
+];
 
 
 export default class MyWiki extends Component {
@@ -81,6 +88,10 @@ export default class MyWiki extends Component {
 
     }
     componentDidMount() {
+        this.setState({ isRefreshing: true });
+        setTimeout(() => {
+            this.setState({ isRefreshing: false })
+        }, 10000);
         Tong.load({
             key:'User',
             autoSync: true,
@@ -95,6 +106,7 @@ export default class MyWiki extends Component {
             // query.descending('createdAt');
             query.find().then(function (products) {
                 console.log(products);
+                details=products;
                 // 查询到商品后，在前端展示到相应的位置中。
             }).catch(function(error) {
                 alert(JSON.stringify(error));
@@ -128,6 +140,10 @@ export default class MyWiki extends Component {
     //监听TextInput中书名的变化
     updateTextInputValueSearchName(newText){
         this.setState({searchName: newText});
+    }
+
+    renderExpenseItem(item , i){
+        return <Text>i</Text>
     }
     render() {
         const { navigate } = this.props.navigation;
@@ -168,7 +184,11 @@ export default class MyWiki extends Component {
                             tintColor='gray'
                         />
                     }>
-                    <SpacingView />
+                    {
+                        details.map((data,index)=>{
+                            return <Item key={data.id} index={index} data={data}  />
+                        })
+                    }
                 </ScrollView>
             </View>
         );
