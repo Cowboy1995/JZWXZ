@@ -18,6 +18,7 @@ import {
     ToastAndroid,
     Dimensions,
     Image,
+    CameraRoll,
 }from 'react-native';
 let {width} = Dimensions.get('window');
 import AV from 'leancloud-storage';
@@ -31,8 +32,10 @@ export default class Login extends Component {
         super(props, context);
         this.state={
             disabled: false,
-            USERNAME:'',
-            PASSWORD:'',
+            // USERNAME:'',
+            // PASSWORD:'',
+            USERNAME:'qwe',
+            PASSWORD:'123456',
             login:false,
         };
     }
@@ -52,9 +55,9 @@ export default class Login extends Component {
                 //调用AV.User.logIn方法进行帐号密码登陆
                 navigate('MyApp');
                 //登陆成功跳转到主页面
-                ToastAndroid.show('登陆成功', ToastAndroid.SHORT);
+                ToastAndroid.show('登录成功', ToastAndroid.SHORT);
             }, function (error) {
-                ToastAndroid.show(error, ToastAndroid.SHORT);
+                ToastAndroid.show('用户名密码错误', ToastAndroid.SHORT);
                 //登陆失败返回帐号或密码错误
             });
         }

@@ -165,8 +165,8 @@ const MyApp = TabNavigator({
 
 const Navigator = StackNavigator(
     {
-
         Home:{ screen:YinDao },
+
         Login:{ screen:Login },
         Register:{ screen:Register },
         SMSLogin:{ screen:SMSLogin },

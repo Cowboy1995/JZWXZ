@@ -14,7 +14,8 @@ import {
     Button,
     ListView,
     ScrollView,
-    RefreshControl
+    RefreshControl,
+    Platform,
 }from 'react-native';
 import screen from '../../common/screen';
 import color from '../../common/color';
@@ -24,13 +25,14 @@ import RefreshState from '../../common/RefreshState';
 import SpacingView from '../../common/SpacingView';
 import DetailCell from '../../common/DetailCell';
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
+import ImagePicker from 'react-native-image-picker';
 import {Paragraph,Heading1, Heading2,HeadingBig,Tip} from '../../common/Text';
 import NavigationItem from '../../common/NavigationItem';
 import AV from 'leancloud-storage';
 const APP_ID = 'H1Y1tHCMNNAdvAx6EMMNNvCJ-gzGzoHsz';
 const APP_KEY = 'OhXxC9b2HhnXFlXM9KPnoi4X';
 AV.initialize(APP_ID, APP_KEY);
-
+let file={};
 export default class NewWiki extends Component{
     static navigationOptions = ({ navigation }) => ({
         headerTitle: '新建百科',
@@ -59,7 +61,7 @@ export default class NewWiki extends Component{
             author:'',
             read:'',
             owner:'',
-
+            images: [],
         }
     }
 
@@ -77,11 +79,19 @@ export default class NewWiki extends Component{
         setTimeout(() => {
             this.setState({ isRefreshing: false })
         }, 10000);
+
         let Wiki = AV.Object.extend('Wiki');
         // AV.Object.extend('className') 所需的参数 className 则表示对应的表名
         // 声明一个类型
         let wiki = new Wiki();
         // 新建对象
+        let name = file.fileName;
+        let avFile = new AV.File(name,  {
+            blob: {
+                uri: file.uri,
+            },
+        });
+        console.log(avFile);
         wiki.set('bookname', this.state.bookname);
         // 设置书名
         wiki.set('book', this.state.book);
@@ -89,14 +99,17 @@ export default class NewWiki extends Component{
         wiki.set('author', this.state.author);
         // 设置作者简介
         wiki.set('owner', AV.User.currentAsync());
-        // 设置百科创建者
+        // // 设置百科创建者
         wiki.set('read', this.state.read);
         // 设置试读
+        wiki.set('picture', avFile);
         wiki.save().then(function() {
+            ToastAndroid.show('上传成功', ToastAndroid.SHORT);
             // 保存成功
         }, function(error) {
-            alert(JSON.stringify(error));
+            // alert(JSON.stringify(error));
             //保存失败
+            alert(error)
         });
 
     }
@@ -116,6 +129,62 @@ export default class NewWiki extends Component{
     // componentDidMount() {
     //
     // }
+    selectPhotoTapped() {
+        // CameraRoll.getPhotos({
+        //     first: 1
+        // }, (data) => {
+        //     var edge = data.edges[0];
+        //     var image = edge.node.image;
+        //     var file = new AV.File('image.jpg', {
+        //         blob: image
+        //     });
+        //     file.save()
+        //         .then(
+        //             () => console.log('图片上传成功'),
+        //             (err) => console.log('图片上传失败', err)
+        //         );
+        // }, console.log);
+        const options = {
+            quality: 1.0,
+            maxWidth: 500,
+            maxHeight: 500,
+            storageOptions: {
+                skipBackup: true
+            }
+        };
+
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+            file=response;
+            if (response.didCancel) {
+                console.log('User cancelled photo picker');
+            }
+            else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            }
+            else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            }
+            else {
+                let source;
+
+                // You can display the image using either:
+                //source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
+
+                //Or:
+                if (Platform.OS === 'android') {
+                    source = {uri: response.uri, isStatic: true};
+                } else {
+                    source = {uri: response.uri.replace('file://', ''), isStatic: true};
+                }
+
+                this.setState({
+                    avatarSource: source,
+                    IMAGE:response.data,
+                });
+            }
+        });
+    }
     render() {
         return (
        <View style={{ flex: 1, backgroundColor: color.background }}>
@@ -166,12 +235,15 @@ export default class NewWiki extends Component{
                    onChangeText={(newText) => this.updateTextInputValueread(newText)}
 
                />
+
                <View style={styles.ItemViewButtom}>
                    <TouchableOpacity style={styles.loginView} onPress={()=>this.submit()} >
                        <Text style={styles.loginbutton}>{"提交"}</Text>
                    </TouchableOpacity>
                </View>
-
+               <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)} style={{flexDirection:'row',alignItems:'center',}}>
+                   <Text style={{marginLeft:10,fontSize: 15,textAlign:'center',marginTop:10}}>添加图片</Text>
+               </TouchableOpacity>
                <SpacingView />
            </ScrollView>
        </View>
