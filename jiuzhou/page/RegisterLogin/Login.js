@@ -52,8 +52,16 @@ export default class Login extends Component {
             //判断密码是否为空，为空提示用户输入密码
         }else {
             AV.User.logIn(this.state.USERNAME, this.state.PASSWORD).then(function (loginedUser) {
+                console.log(loginedUser)
                 //调用AV.User.logIn方法进行帐号密码登陆
-                navigate('MyApp');
+                const {id}=loginedUser;
+                //把经销商登录信息存储下来
+                Tong.save({
+                    key: 'User',  // 注意:请不要在key中使用_下划线符号!
+                    data: {
+                        id:id,
+                    },
+                }).then(()=>navigate('MyApp'));
                 //登陆成功跳转到主页面
                 ToastAndroid.show('登录成功', ToastAndroid.SHORT);
             }, function (error) {

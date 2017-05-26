@@ -1,4 +1,7 @@
 /**
+ * Created by Tong on 2017/5/26.
+ */
+/**
  * Created by Tong on 2017/5/12.
  */
 import React, { Component } from 'react';
@@ -29,36 +32,10 @@ import AV from 'leancloud-storage';
 const APP_ID = 'H1Y1tHCMNNAdvAx6EMMNNvCJ-gzGzoHsz';
 const APP_KEY = 'OhXxC9b2HhnXFlXM9KPnoi4X';
 AV.initialize(APP_ID, APP_KEY);
-let Book={
-    read: "夏日的宁州是一片间杂着无数黛黑和深灰的青绿色大陆，而天空一片淡蓝，仿佛一顶巨大的圆形帷帐，它向四周伸…高的山峰从森林的枷锁中挣脱出来，连成一串闪闪发光的珍珠。 淡青和淡紫色的云烟从浩淼的大陆上升...",
-    bookname: "九州铁浮图",
-    book: "宁州诸侯的先遣使团，暗夜之主的深藏不露，羽族城主的老谋深算，影者触须的无所不在，蛮族流寇的压境大军，…上，城中不朽的铁塔能否支撑这欲覆的天空？一个构思精巧连锁细密的故事，步步解开这惊心动魄的九连环套。", author: "潘海天，科幻作家，自1994年写作以来，曾五次获得中国科幻银河奖，代表作有《黑暗中归来》、《大角，快…》、《白雀神龟》、《龙渊阁传说》、《厌火》、《七天七夜》、《宝剑炉》、《灭云》、《向北向北向北》。",
-};
-let picture='http://ac-H1Y1tHCM.clouddn.com/6df75d13deb886f74f04.jpg';
-let search='';
-// // 获取输入框的内容inputContent   九州铁浮图
-// let inputContent = "他妈的tmdfuckk";
-//
-// // 多个敏感词，这里直接以数组的形式展示出来
-// let arrMg = ["fuck", "tmd", "他妈的"];
-//
-// // 显示的内容--showContent
-// let showContent = inputContent;
-//
-// // 正则表达式
-// // \d 匹配数字
-//
-// for (let i = 0; i < arrMg.length; i++) {
-//
-//     // 创建一个正则表达式
-//     let r = new RegExp(arrMg[i], "ig");
-//
-//     showContent = showContent.replace(r, "*");
-// }
-// // 显示的内容--showInput
-// console.log(showContent);
 
-export default class WikiScene extends Component {
+
+
+export default class MyWiki extends Component {
     static navigationOptions = ({ navigation }) => ({
         header:null,
     });
@@ -104,6 +81,35 @@ export default class WikiScene extends Component {
 
     }
     componentDidMount() {
+        Tong.load({
+            key:'User',
+            autoSync: true,
+            syncInBackground: true
+        }).then(ret => {
+            console.log(ret.id);
+            let query = new AV.Query('Wiki');
+            query.startsWith('ids', ret.id);
+            // query.contains('ids',ret.id);
+            // query.include('owner');
+            // query.include('picture');
+            // query.descending('createdAt');
+            query.find().then(function (products) {
+                console.log(products);
+                // 查询到商品后，在前端展示到相应的位置中。
+            }).catch(function(error) {
+                alert(JSON.stringify(error));
+            });
+        }).catch(err => {
+            console.warn(err.message);
+            switch (err.name) {
+                case 'NotFoundError':
+                    // TODO;
+                    break;
+                case 'ExpiredError':
+                    // TODO
+                    break;
+            }
+        });
 
 
         // let query = new AV.Query('Wiki');
@@ -130,7 +136,7 @@ export default class WikiScene extends Component {
                 <View style={styles.header}>
                     <Text style={styles.title}>九州百科</Text>
                     <TouchableOpacity
-                        onPress={() => navigate('MyWiki')}
+                        onPress={() => navigate('NewWiki')}
                     >
                         <Image source={require('../../img/xinjian.png')} style={styles.searchIcon}
                         />
@@ -148,8 +154,8 @@ export default class WikiScene extends Component {
                         <TouchableOpacity
                             onPress={()=>this.searchBook()}
                         >
-                        <Image source={require('../../img/Home/search_icon.png')} style={styles.searchIcon}
-                        />
+                            <Image source={require('../../img/Home/search_icon.png')} style={styles.searchIcon}
+                            />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -162,20 +168,6 @@ export default class WikiScene extends Component {
                             tintColor='gray'
                         />
                     }>
-                    {/*标题书名*/}
-                    <Text style={{fontSize: 20,}}>{Book.bookname}</Text>
-                    <Image source={{uri: picture}} style={styles.searchPicture} />
-                    {/*<Image source={Book.picture.attributes.url} style={styles.searchIcon} />*/}
-
-                    <Text style={{fontSize: 20,}}>内容简介</Text>
-                    <Text style={{fontSize: 20,}}>{Book.book}</Text>
-                    <Text style={{fontSize: 20,}}>作者简介</Text>
-                    <Text style={{fontSize: 20,}}>{Book.author}</Text>
-                    <Text style={{fontSize: 20,}}>试读</Text>
-                    <Text style={{fontSize: 20,}}>{Book.read}</Text>
-                    <View>
-
-                    </View>
                     <SpacingView />
                 </ScrollView>
             </View>

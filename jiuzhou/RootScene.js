@@ -35,6 +35,7 @@ import SetPassword from './page/RegisterLogin/SetPassword';
 import HomeScene from './page/Contact/ContactScene';
 import WikiScene from './page/Wiki/WikiScene';
 import NewWiki from './page/Wiki/NewWiki';
+import MyWiki from './page/Wiki/MyWiki';
 
 import MomentsScene from './page/Moments/MomentsScene';
 import MineScene from './page/Mine/MineScene';
@@ -171,8 +172,8 @@ const Navigator = StackNavigator(
         Register:{ screen:Register },
         SMSLogin:{ screen:SMSLogin },
         SetPassword:{ screen:SetPassword },
+        MyWiki:{ screen:MyWiki },
         NewWiki:{ screen:NewWiki },
-
         MyApp:{ screen:MyApp },
 
         // Tab: { screen: Tab },
