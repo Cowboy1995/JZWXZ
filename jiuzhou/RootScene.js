@@ -41,6 +41,9 @@ import NewWiki from './page/Wiki/NewWiki';
 import MyWiki from './page/Wiki/MyWiki';
 
 import MomentsScene from './page/Moments/MomentsScene';
+import NewMoments from './page/Moments/NewMoments';
+
+
 import MineScene from './page/Mine/MineScene';
 
 
@@ -179,6 +182,8 @@ const Navigator = StackNavigator(
         ContactDetail:{ screen:ContactDetail },
         NewWiki:{ screen:NewWiki },
         DeatailMoments:{ screen:DeatailMoments },
+        NewMoments:{ screen:NewMoments },
+
 
         MyApp:{ screen:MyApp },
 

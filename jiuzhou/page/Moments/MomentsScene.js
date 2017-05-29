@@ -63,8 +63,12 @@ export default class MomentsScene extends Component {
             <View style={{flex:1}}>
                 <View style={styles.header}>
                     <Text style={styles.title}>朋友圈</Text>
-                    <Image source={require('../../img/xinjian.png')} style={{marginRight:10,marginTop:1,height:25,width:25,}}
-                    />
+                    <TouchableOpacity
+                        onPress={() => navigate('NewMoments')}
+                    >
+                        <Image source={require('../../img/xinjian.png')} style={{marginRight:10,marginTop:1,height:25,width:25,}}
+                        />
+                    </TouchableOpacity>
                 </View>
                 <ScrollView >
                     <View style={{flex:1,backgroundColor:'white'}}>
