@@ -144,7 +144,7 @@ export default class WikiScene extends Component {
                     <TouchableOpacity
                         onPress={() => navigate('MyWiki')}
                     >
-                        <Image source={require('../../img/xinjian.png')} style={styles.searchIcon}
+                        <Image source={require('../../img/xinjian.png')} style={{marginRight:10,marginTop:1,height:25,width:25,}}
                         />
                     </TouchableOpacity>
                 </View>
@@ -270,16 +270,17 @@ const styles = StyleSheet.create({
         textAlign:'center'
     },
     title: {
-        fontSize:16,
+        fontSize:18,
         textAlign:'center',
         color:'white',
+        marginLeft:screen.width/2-40,
     },
     header: {
         width:window.width,
         height: 44,
         backgroundColor: color.theme,
         flexDirection:'row',
-        justifyContent:'center',
+        justifyContent:'space-between',
         alignItems:'center',
     },
     searchBox: {

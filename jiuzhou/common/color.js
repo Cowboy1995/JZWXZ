@@ -15,5 +15,6 @@ export default {
     White: '#ffffff',
     iPhoneBlue: '#0A60FE',
     WechatGreen: '#1EA114',
-    littlegray:'#bfbfbf'
+    littlegray:'#bfbfbf',
+    ziti:'#23238E'
 }

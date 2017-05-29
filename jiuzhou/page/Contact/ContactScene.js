@@ -32,20 +32,7 @@ let data=[
     {avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_08.png",name: "Yancey", phone: "12345678978",userId: 158},
 
 ]
-async function fetchLocal (input: string, init?: Object): Object {
-    try {
-        let result = await fetch(input, init);
-        let resultJson = await result.json();
 
-        if (!resultJson.success) {
-            Alert.alert('ImServer Error', resultJson.data.message);
-        }
-
-        return resultJson;
-    } catch (e) {
-        Alert.alert('Fetch Error', e);
-    }
-}
 export default class ContactScene extends Component {
     static navigationOptions = ({ navigation }) => ({
         header:null,
@@ -195,7 +182,7 @@ const styles = StyleSheet.create({
         textAlign:'center'
     },
     title: {
-        fontSize:16,
+        fontSize:18,
         textAlign:'center',
         color:'white',
     },

@@ -20,13 +20,14 @@ import {
     Image,
     Button,
     ListView,
-    RefreshControl
+    RefreshControl,
+    ScrollView
 }from 'react-native';
 import screen from '../../common/screen';
 import color from '../../common/color';
 let data=[
     {time:'Thu May 25 2017 01:38:45 ',area:'浙江    宁波',biaoqian:'高中同学',avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_15.png",name: "Aaron",nickname:"Aaaa", phone: "12345678978",userId: 158},
-    {avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_16.png",name: "Bailey",nickname:"Bbbb", phone: "12345678978",userId: 158},
+    {time:'Thu May 24 2017 11:25:59 ',avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_16.png",name: "Bailey",nickname:"Bbbb", phone: "12345678978",userId: 158},
     {avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_17.png",name: "Cady",nickname:"Aaaa", phone: "12345678978",userId: 158},
     {avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_18.png",name: "Dacey", nickname:"Aaaa",phone: "12345678978",userId: 158},
     {avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_10.png",name: "Earl", phone: "12345678978",userId: 158},
@@ -78,65 +79,60 @@ export default class DeatailMoments extends Component {
         const { navigate } = this.props.navigation;
 
         return (
-            <View style={{flex:1,backgroundColor:'white'}}>
-                <View style={{height:20,backgroundColor:color.gray}}/>
-                <View style={styles.root}>
-                    <Image style={styles.img} source={{uri: data[1].avatar}} />
-                    <View style={styles.content}>
-                        <Text style={styles.name}>{data[1].nickname}</Text>
-                        <View style={styles.priceAndControls}>
-                            {/*<Text style={styles.price}>￥{price.toFixed(2)}</Text>*/}
-                            <Text style={{fontSize:12,color:color.littlegray}}>{data[0].time}</Text>
+            <ScrollView>
+                <View style={{flex:1,backgroundColor:'white'}}>
+                    <View style={{height:20,backgroundColor:color.gray}}/>
+                    <View style={styles.root}>
+                        <Image style={styles.img} source={{uri: data[1].avatar}} />
+                        <View style={styles.content}>
+                            <Text style={styles.name}>{data[1].nickname}</Text>
+                            <View style={styles.priceAndControls}>
+                                {/*<Text style={styles.price}>￥{price.toFixed(2)}</Text>*/}
+                                <Text style={{fontSize:12,color:color.littlegray}}>{data[0].time}</Text>
+                            </View>
                         </View>
+                        <View style={{height:1,backgroundColor:color.white,}}/>
                     </View>
-                    <View style={{height:1,backgroundColor:color.white,}}/>
-                </View>
-                {/*<Image style={styles.img1} source={require('../../img/s1.jpg')} />*/}
+                    {/*<Image style={styles.img1} source={require('../../img/s1.jpg')} />*/}
 
-                <Image source={require('../../img/s5.jpg')} style={{marginLeft:63,marginTop:10,height:200,width:250,}}
-                />
-                <Image source={require('../../img/message.png')} style={{marginLeft:screen.width-10,marginTop:10,height:20,width:20,}}
-                />
-                <View style={{height:20,backgroundColor:color.gray}}/>
-                <View style={{height:40,backgroundColor:'white',alignItems: 'center',flexDirection: 'row',
-                paddingHorizontal: 15,paddingVertical: 10,}}>
-                    <Text style={{textAlign:'center',}}>标签</Text>
-                    <Text style={{fontSize:14,color:color.littlegray,marginLeft:55}}>{data[0].biaoqian}</Text>
-                </View>
+                    <Image source={require('../../img/s5.jpg')} style={{marginLeft:63,marginTop:10,height:200,width:250,resizeMode: 'stretch',}}
+                    />
+                    <Image source={require('../../img/message.png')} style={{marginLeft:screen.width-35,marginTop:10,height:25,width:25,}}
+                    />
+                    <View style={{height:40,backgroundColor:color.LittleGrey,alignItems: 'center',flexDirection: 'row',
+                paddingHorizontal: 15,paddingVertical: 10,marginLeft:63,marginRight:13,marginTop:5}}>
+                        <Text style={{fontSize:13,color:color.ziti}}>{data[0].nickname+':'}</Text>
+                        <Text style={{fontSize:13,}}>{'好美丽的风景啊！'}</Text>
+                    </View>
+                    <View style={{height:0.5,backgroundColor:color.littlegray,marginTop:10}}/>
 
-                <View style={{height:20,backgroundColor:color.gray}}/>
-                <View style={{height:40,backgroundColor:'white',alignItems: 'center',flexDirection: 'row',
-                paddingHorizontal: 15,paddingVertical: 10,}}>
-                    <Text style={{textAlign:'center',}}>电话</Text>
-                    <Text style={{fontSize:14,color:color.littlegray,marginLeft:55}}>{data[0].phone}</Text>
-                </View>
+                    <View style={{height:20,backgroundColor:color.gray}}/>
+                    <View style={styles.root}>
+                        <Image style={styles.img} source={{uri: data[0].avatar}} />
+                        <View style={styles.content}>
+                            <Text style={styles.name}>{data[0].nickname}</Text>
+                            <View style={styles.priceAndControls}>
+                                {/*<Text style={styles.price}>￥{price.toFixed(2)}</Text>*/}
+                                <Text style={{fontSize:12,color:color.littlegray}}>{data[1].time}</Text>
+                            </View>
+                        </View>
+                        <View style={{height:1,backgroundColor:color.white,}}/>
+                    </View>
+                    {/*<Image style={styles.img1} source={require('../../img/s1.jpg')} />*/}
 
-                <View style={{height:20,backgroundColor:color.gray}}/>
-                <View style={{height:40,backgroundColor:'white',alignItems: 'center',flexDirection: 'row',
-                paddingHorizontal: 15,paddingVertical: 10,}}>
-                    <Text style={{textAlign:'center',}}>地区</Text>
-                    <Text style={{fontSize:14,color:color.littlegray,marginLeft:55}}>{data[0].area}</Text>
+                    <Image source={require('../../img/s3.jpg')} style={{marginLeft:63,marginTop:10,height:200,width:250,resizeMode: 'stretch',}}
+                    />
+                    <Image source={require('../../img/message.png')} style={{marginLeft:screen.width-35,marginTop:10,height:25,width:25,}}
+                    />
+                    <View style={{height:40,backgroundColor:color.LittleGrey,alignItems: 'center',flexDirection: 'row',
+                paddingHorizontal: 15,paddingVertical: 10,marginLeft:63,marginRight:13,marginTop:5}}>
+                        <Text style={{fontSize:13,color:color.ziti}}>{data[1].nickname+':'}</Text>
+                        <Text style={{fontSize:13,}}>{'阳光明媚的一天'}</Text>
+                    </View>
+                    <View style={{height:0.5,backgroundColor:color.littlegray,marginTop:10}}/>
                 </View>
+            </ScrollView>
 
-                <View style={{height:1,backgroundColor:color.gray}}/>
-                <View style={{height:80,backgroundColor:'white',alignItems: 'center',flexDirection: 'row',
-                paddingHorizontal: 15,paddingVertical: 10,}}>
-                    <Text style={{textAlign:'center',}}>个人相册</Text>
-                    <Image style={styles.img1} source={{uri: 'http://ac-H1Y1tHCM.clouddn.com/6df75d13deb886f74f04.jpg'}} />
-
-                </View>
-
-                <View style={{height:1,backgroundColor:color.gray}}/>
-                <View style={{height:40,backgroundColor:'white',alignItems: 'center',flexDirection: 'row',
-                paddingHorizontal: 15,paddingVertical: 10,}}>
-                    <Text style={{textAlign:'center',}}>更多</Text>
-                </View>
-                <View style={styles.ItemViewButtom}>
-                    <TouchableOpacity style={styles.loginView} onPress={()=>navigate('NewWiki')}>
-                        <Text style={{color:'white'}}>{"查看朋友圈"}</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
 
 
         );
@@ -176,6 +172,7 @@ const styles = StyleSheet.create({
     name: {
         width: 280,
         fontSize: 14,
+        color:color.ziti
     },
     ItemViewButtom:{
         flexDirection:'row',
