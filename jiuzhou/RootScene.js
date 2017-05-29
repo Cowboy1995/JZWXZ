@@ -22,7 +22,7 @@ import {
     Image,
     Button
 }from 'react-native';
-import { StackNavigator,TabNavigator,TabBarBottom } from 'react-navigation';
+import { StackNavigator,TabNavigator,TabBarBottom, } from 'react-navigation';
 import screen from './common/screen';
 import color from './common/color';
 import TabBarItem from './common/TabBarItem';

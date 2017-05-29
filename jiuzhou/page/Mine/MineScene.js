@@ -52,13 +52,13 @@ export default class WikiScene extends Component {
     static navigationOptions = ({ navigation }) => ({
         headerTitle: (
             <TouchableOpacity style={styles.searchBar}>
-                <Image source={require('../../img/set.png')} style={styles.searchIcon} />
+                <Image source={require('../../img/Home/search_icon.png')} style={styles.searchIcon} />
                 <Paragraph>搜索</Paragraph>
             </TouchableOpacity>
         ),
         headerRight: (
             <NavigationItem
-                icon={require('../../img/Home/icon_navigationItem_message_white@2x.png')}
+                icon={require('../../img/set.png')}
                 onPress={() => {
                 }}
             />
@@ -169,7 +169,6 @@ export default class WikiScene extends Component {
                 ],
                 [
                     { title: '客服中心', image: require('../../img/Mine/icon_mine_customerService@2x.png') },
-                    { title: '关于美团', subtitle: '我要合作', image: require('../../img/Mine/icon_mine_aboutmeituan@2x.png') }
                 ]
             ]
         )

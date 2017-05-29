@@ -183,17 +183,28 @@ export default class WikiScene extends Component {
                             tintColor='gray'
                         />
                     }>
-                    {/*标题书名*/}
-                    <Text style={{fontSize: 20,}}>{Book.bookname}</Text>
                     <Image source={{uri: picture}} style={styles.searchPicture} />
-                    {/*<Image source={Book.picture.attributes.url} style={styles.searchIcon} />*/}
+                    {/*标题书名*/}
+                    <View style={{flexDirection:'row'}}>
+                        <View>
+                            <Text style={{fontSize: 20,marginLeft:15,marginTop:10}}>{Book.bookname}</Text>
+                            <Text style={{fontSize: 14,marginLeft:15,marginTop:5,color:color.littlegray}}>作者：江南</Text>
+                            <Text style={{fontSize: 14,marginLeft:15,color:color.littlegray}}>出版时间：2005-6</Text>
+                        </View>
+                        <View style={{height:80,width:80,backgroundColor:'white',marginTop:10,marginLeft:130,borderColor:color.Grey,
+                        borderWidth:0.75}}>
+                            <Text style={{fontSize: 14,marginLeft:15,marginTop:10,color:color.littlegray}}>读者评分</Text>
+                            <Text style={{fontSize: 20,marginLeft:28,marginTop:10}}>8.8</Text>
+                        </View>
+                    </View>
 
-                    <Text style={{fontSize: 20,}}>内容简介</Text>
-                    <Text style={{fontSize: 20,}}>{Book.book}</Text>
-                    <Text style={{fontSize: 20,}}>作者简介</Text>
-                    <Text style={{fontSize: 20,}}>{Book.author}</Text>
-                    <Text style={{fontSize: 20,}}>试读</Text>
-                    <Text style={{fontSize: 20,}}>{Book.read}</Text>
+
+                    <Text style={{fontSize: 14,marginLeft:15,marginTop:30,color:color.littlegray}}>简介</Text>
+                    <Text style={{fontSize: 16,marginLeft:15,marginTop:10,marginRight:15,}}>{Book.book}</Text>
+                    <Text style={{fontSize: 14,marginLeft:15,marginTop:20,color:color.littlegray}}>作者</Text>
+                    <Text style={{fontSize: 16,marginLeft:15,marginTop:10,marginRight:15,}}>{Book.author}</Text>
+                    <Text style={{fontSize: 14,marginLeft:15,marginTop:30,color:color.littlegray,}}>试读</Text>
+                    <Text style={{fontSize: 16,marginLeft:15,marginTop:10,marginRight:15,}}>{Book.read}</Text>
                     <View>
 
                     </View>
@@ -238,9 +249,12 @@ const styles = StyleSheet.create({
 
     },
     searchPicture: {
-        width: 80,
-        height: 80,
+        width: 150,
+        height: 200,
         margin: 5,
+        resizeMode: 'stretch',
+        marginLeft:100
+
     },
     // header: {
     //     backgroundColor: color.theme,
