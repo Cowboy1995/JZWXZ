@@ -47,7 +47,7 @@ export default class ContactDetail extends Component {
             <TouchableOpacity
                 onPress={() => navigation.goBack(null)}
             >
-                <Image source={require('../../img/icon_return.png')} style={styles.searchIcon}
+                <Image source={require('../../img/return.png')} style={styles.searchIcon}
                 />
             </TouchableOpacity>
         )
@@ -153,8 +153,8 @@ const styles = StyleSheet.create({
     },
     searchIcon: {
         marginLeft: 10,
-        width: 16,
-        height: 16
+        width: 18,
+        height: 18
     },
     searchPicture: {
         width: 80,
