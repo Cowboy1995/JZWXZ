@@ -34,6 +34,7 @@ import SetPassword from './page/RegisterLogin/SetPassword';
 
 import ContactScene from './page/Contact/ContactScene';
 import ContactDetail from './page/Contact/ContactDetail';
+import DeatailMoments from './page/Contact/DeatailMoments';
 
 import WikiScene from './page/Wiki/WikiScene';
 import NewWiki from './page/Wiki/NewWiki';
@@ -177,6 +178,7 @@ const Navigator = StackNavigator(
         MyWiki:{ screen:MyWiki },
         ContactDetail:{ screen:ContactDetail },
         NewWiki:{ screen:NewWiki },
+        DeatailMoments:{ screen:DeatailMoments },
 
         MyApp:{ screen:MyApp },
 

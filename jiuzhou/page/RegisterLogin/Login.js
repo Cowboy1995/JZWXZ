@@ -52,7 +52,7 @@ export default class Login extends Component {
             //判断密码是否为空，为空提示用户输入密码
         }else {
             AV.User.logIn(this.state.USERNAME, this.state.PASSWORD).then(function (loginedUser) {
-                console.log(loginedUser)
+                console.log(loginedUser.updatedAt);
                 //调用AV.User.logIn方法进行帐号密码登陆
                 const {id}=loginedUser;
                 //把经销商登录信息存储下来

@@ -1,4 +1,7 @@
 /**
+ * Created by Tong on 2017/5/30.
+ */
+/**
  * Created by Tong on 2017/5/29.
  */
 /**
@@ -22,7 +25,7 @@ import {
 import screen from '../../common/screen';
 import color from '../../common/color';
 let data=[
-    {area:'浙江    宁波',biaoqian:'高中同学',avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_15.png",name: "Aaron",nickname:"Aaaa", phone: "12345678978",userId: 158},
+    {time:'Thu May 25 2017 01:38:45 ',area:'浙江    宁波',biaoqian:'高中同学',avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_15.png",name: "Aaron",nickname:"Aaaa", phone: "12345678978",userId: 158},
     {avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_16.png",name: "Bailey",nickname:"Bbbb", phone: "12345678978",userId: 158},
     {avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_17.png",name: "Cady",nickname:"Aaaa", phone: "12345678978",userId: 158},
     {avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_18.png",name: "Dacey", nickname:"Aaaa",phone: "12345678978",userId: 158},
@@ -36,10 +39,10 @@ let data=[
 
 ]
 
-export default class ContactDetail extends Component {
+export default class DeatailMoments extends Component {
     static navigationOptions = ({ navigation, }) => ({
         headerTitle: (
-            <Text style={{color:'white',fontSize:16,marginLeft:10}}>详细资料</Text>
+            <Text style={{color:'white',fontSize:16,marginLeft:10}}>朋友圈</Text>
         ),
 
         headerStyle: { backgroundColor: color.theme,height:50 },
@@ -75,20 +78,21 @@ export default class ContactDetail extends Component {
         const { navigate } = this.props.navigation;
 
         return (
-            <View style={{flex:1}}>
-
+            <View style={{flex:1,backgroundColor:'white'}}>
                 <View style={{height:20,backgroundColor:color.gray}}/>
-                    <View style={styles.root}>
-                        <Image style={styles.img} source={{uri: data[1].avatar}} />
-                        <View style={styles.content}>
-                            <Text style={styles.name}>{data[1].nickname}</Text>
-                            <View style={styles.priceAndControls}>
-                                {/*<Text style={styles.price}>￥{price.toFixed(2)}</Text>*/}
-                                <Text style={{fontSize:14,color:color.littlegray}}>{'昵称：'+data[1].name}</Text>
-                            </View>
+                <View style={styles.root}>
+                    <Image style={styles.img} source={{uri: data[1].avatar}} />
+                    <View style={styles.content}>
+                        <Text style={styles.name}>{data[1].nickname}</Text>
+                        <View style={styles.priceAndControls}>
+                            {/*<Text style={styles.price}>￥{price.toFixed(2)}</Text>*/}
+                            <Text style={{fontSize:12,color:color.littlegray}}>{data[0].time}</Text>
                         </View>
-                    <View style={{height:1,backgroundColor:color.white,}}/>
                     </View>
+                    <View style={{height:1,backgroundColor:color.white,}}/>
+                </View>
+                <Image style={} source={require('../../img/return.png')} />
+
 
                 <View style={{height:20,backgroundColor:color.gray}}/>
                 <View style={{height:40,backgroundColor:'white',alignItems: 'center',flexDirection: 'row',
@@ -125,7 +129,7 @@ export default class ContactDetail extends Component {
                     <Text style={{textAlign:'center',}}>更多</Text>
                 </View>
                 <View style={styles.ItemViewButtom}>
-                    <TouchableOpacity style={styles.loginView} onPress={()=>navigate('DeatailMoments')}>
+                    <TouchableOpacity style={styles.loginView} onPress={()=>navigate('NewWiki')}>
                         <Text style={{color:'white'}}>{"查看朋友圈"}</Text>
                     </TouchableOpacity>
                 </View>
@@ -148,11 +152,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 15,
         paddingVertical: 10,
-        height:80
+        height:40
     },
     img: {
-        height: 60,
-        width: 60,
+        height: 30,
+        width: 30,
         marginRight: 15
     },
     img1: {
@@ -167,9 +171,8 @@ const styles = StyleSheet.create({
 
     },
     name: {
-        width: 240,
-        fontSize: 16,
-        marginBottom:15,
+        width: 280,
+        fontSize: 14,
     },
     ItemViewButtom:{
         flexDirection:'row',
