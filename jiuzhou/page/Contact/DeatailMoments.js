@@ -91,9 +91,12 @@ export default class DeatailMoments extends Component {
                     </View>
                     <View style={{height:1,backgroundColor:color.white,}}/>
                 </View>
-                <Image style={styles.img1} source={require('../../img/s1.jpg')} />
+                {/*<Image style={styles.img1} source={require('../../img/s1.jpg')} />*/}
 
-
+                <Image source={require('../../img/s5.jpg')} style={{marginLeft:63,marginTop:10,height:200,width:250,}}
+                />
+                <Image source={require('../../img/message.png')} style={{marginLeft:screen.width-10,marginTop:10,height:20,width:20,}}
+                />
                 <View style={{height:20,backgroundColor:color.gray}}/>
                 <View style={{height:40,backgroundColor:'white',alignItems: 'center',flexDirection: 'row',
                 paddingHorizontal: 15,paddingVertical: 10,}}>
