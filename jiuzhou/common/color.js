@@ -14,5 +14,6 @@ export default {
     BackgroundGrey: '#f2f2f2',
     White: '#ffffff',
     iPhoneBlue: '#0A60FE',
-    WechatGreen: '#1EA114'
+    WechatGreen: '#1EA114',
+    littlegray:'#bfbfbf'
 }
