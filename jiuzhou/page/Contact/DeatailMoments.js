@@ -91,7 +91,7 @@ export default class DeatailMoments extends Component {
                     </View>
                     <View style={{height:1,backgroundColor:color.white,}}/>
                 </View>
-                <Image style={} source={require('../../img/return.png')} />
+                <Image style={styles.img1} source={require('../../img/s1.jpg')} />
 
 
                 <View style={{height:20,backgroundColor:color.gray}}/>
