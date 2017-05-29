@@ -97,14 +97,18 @@ export default class NewMoments extends Component {
                         maxHeight={200}
                     />
                 </View>
-                <View style={{height:100,width:100,marginTop:10,marginLeft:10,backgroundColor:'white'}}>
-                    <Image source={require('../../img/add.png')} style={{height:80,width:80,resizeMode: 'stretch',}}
-                    />
+                <View style={{flexDirection:'row'}}>
+                    <View style={{height:100,width:100,marginTop:20,marginLeft:20,backgroundColor:'white',alignItems: 'center',justifyContent: 'center',
+}}>
+                        <Image source={require('../../img/add.png')} style={{height:80,width:80,resizeMode: 'stretch',}}
+                        />
+                    </View>
+                    <TouchableOpacity style={{alignItems: 'center',justifyContent: 'center',backgroundColor:color.LightBlack,
+            marginLeft:150,marginTop:80,height:40,width:80,borderRadius:1}}>
+                        <Text style={{color:'white'}}>{"添加图片"}</Text>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={{alignItems: 'center',justifyContent: 'center',backgroundColor:color.LightBlack,
-            marginLeft:10,marginTop:10,height:40,width:80,borderRadius:1}}>
-                    <Text style={{color:'white'}}>{"添加图片"}</Text>
-                </TouchableOpacity>
+
             </View>
 
 

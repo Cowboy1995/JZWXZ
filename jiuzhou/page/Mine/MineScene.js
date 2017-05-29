@@ -52,7 +52,7 @@ export default class WikiScene extends Component {
     static navigationOptions = ({ navigation }) => ({
         headerTitle: (
             <TouchableOpacity style={styles.searchBar}>
-                <Image source={require('../../img/Home/search_icon.png')} style={styles.searchIcon} />
+                <Image source={require('../../img/set.png')} style={styles.searchIcon} />
                 <Paragraph>搜索</Paragraph>
             </TouchableOpacity>
         ),
