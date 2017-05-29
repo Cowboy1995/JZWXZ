@@ -32,7 +32,9 @@ import Register from './page/RegisterLogin/Register';
 import SMSLogin from './page/RegisterLogin/SMSLogin';
 import SetPassword from './page/RegisterLogin/SetPassword';
 
-import HomeScene from './page/Contact/ContactScene';
+import ContactScene from './page/Contact/ContactScene';
+import ContactDetail from './page/Contact/ContactDetail';
+
 import WikiScene from './page/Wiki/WikiScene';
 import NewWiki from './page/Wiki/NewWiki';
 import MyWiki from './page/Wiki/MyWiki';
@@ -105,7 +107,7 @@ const MyApp = TabNavigator({
             }),
         },
     Home: {
-        screen: HomeScene,
+        screen: ContactScene,
         navigationOptions: ({ navigation }) => ({
             tabBarLabel: '通讯录',
             tabBarIcon: ({ focused, tintColor }) => (
@@ -173,7 +175,9 @@ const Navigator = StackNavigator(
         SMSLogin:{ screen:SMSLogin },
         SetPassword:{ screen:SetPassword },
         MyWiki:{ screen:MyWiki },
+        ContactDetail:{ screen:ContactDetail },
         NewWiki:{ screen:NewWiki },
+
         MyApp:{ screen:MyApp },
 
         // Tab: { screen: Tab },

@@ -46,7 +46,7 @@ async function fetchLocal (input: string, init?: Object): Object {
         Alert.alert('Fetch Error', e);
     }
 }
-export default class HomeScene extends Component {
+export default class ContactScene extends Component {
     static navigationOptions = ({ navigation }) => ({
         header:null,
     })
@@ -61,10 +61,15 @@ export default class HomeScene extends Component {
                 rowHasChanged: (row1, row2) => row1 !== row2,
             }),
         };
+
     }
+
     componentDidMount(){
+        const { navigate } = this.props.navigation;
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(data),
+            navigate:navigate,
+
         });
     }
 
@@ -80,10 +85,11 @@ export default class HomeScene extends Component {
         // });
     };
 
+
     _renderRow (rowData) {
         return (
             <View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => this.state.navigate('ContactDetail')}>
                     <View style={styles.root}>
                         <Image style={styles.img} source={{uri: rowData.avatar}} />
                         <View style={styles.content}>
@@ -103,6 +109,7 @@ export default class HomeScene extends Component {
 
 
     render() {
+
         return (
             <View style={{flex:1}}>
                 <View style={styles.header}>
@@ -128,7 +135,7 @@ export default class HomeScene extends Component {
                 <ListView
                     style={styles.container}
                     dataSource={this.state.dataSource}
-                    renderRow={this._renderRow}
+                    renderRow={this._renderRow.bind(this)}
                     enableEmptySections={true}
                 />
             </View>
