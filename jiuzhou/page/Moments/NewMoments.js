@@ -98,7 +98,8 @@ export default class NewMoments extends Component {
                     />
                 </View>
                 <View style={{height:100,width:100,marginTop:10,marginLeft:10,backgroundColor:'white'}}>
-
+                    <Image source={require('../../img/add.png')} style={{height:80,width:80,resizeMode: 'stretch',}}
+                    />
                 </View>
                 <TouchableOpacity style={{alignItems: 'center',justifyContent: 'center',backgroundColor:color.LightBlack,
             marginLeft:10,marginTop:10,height:40,width:80,borderRadius:1}}>
