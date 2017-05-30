@@ -97,17 +97,24 @@ export default class NewMoments extends Component {
                         maxHeight={200}
                     />
                 </View>
-                <View style={{flexDirection:'row'}}>
-                    <View style={{height:100,width:100,marginTop:20,marginLeft:20,backgroundColor:'white',alignItems: 'center',justifyContent: 'center',
-}}>
-                        <Image source={require('../../img/add.png')} style={{height:80,width:80,resizeMode: 'stretch',}}
-                        />
-                    </View>
-                    <TouchableOpacity style={{alignItems: 'center',justifyContent: 'center',backgroundColor:color.LightBlack,
-            marginLeft:150,marginTop:80,height:40,width:80,borderRadius:1}}>
-                        <Text style={{color:'white'}}>{"添加图片"}</Text>
-                    </TouchableOpacity>
-                </View>
+
+                <TouchableOpacity style={{alignItems: 'center',justifyContent: 'center',backgroundColor:color.littlegray,
+                                 marginLeft:15,marginTop:20,height:80,width:80,borderRadius:1}}
+                                  >
+                    <Image source={require('../../img/picture.png')} style={{height:36,width:36,resizeMode: 'stretch',}}/>
+                    <Text style={{color:'#666666',fontSize: 14,marginTop:5}}>{"添加图片"}</Text>
+                </TouchableOpacity>
+                {/*<View style={{flexDirection:'row'}}>*/}
+                    {/*<View style={{height:100,width:100,marginTop:20,marginLeft:20,backgroundColor:'white',alignItems: 'center',justifyContent: 'center',*/}
+{/*}}>*/}
+                        {/*<Image source={require('../../img/add.png')} style={{height:80,width:80,resizeMode: 'stretch',}}*/}
+                        {/*/>*/}
+                    {/*</View>*/}
+                    {/*<TouchableOpacity style={{alignItems: 'center',justifyContent: 'center',backgroundColor:color.LightBlack,*/}
+            {/*marginLeft:150,marginTop:80,height:40,width:80,borderRadius:1}}>*/}
+                        {/*<Text style={{color:'white'}}>{"添加图片"}</Text>*/}
+                    {/*</TouchableOpacity>*/}
+                {/*</View>*/}
 
             </View>
 
@@ -168,13 +175,13 @@ const styles = StyleSheet.create({
         width:screen.width-20,
         borderRadius:5,
     },
-    ItemViewButtom:{
-        flexDirection:'row',
-        justifyContent:'space-around',
-        alignItems:'center',
-        backgroundColor:'#ECEDF1',
-        marginTop:10,
-    },
+    // ItemViewButtom:{
+    //     flexDirection:'row',
+    //     justifyContent:'space-around',
+    //     alignItems:'center',
+    //     backgroundColor:'#ECEDF1',
+    //     marginTop:10,
+    // },
     textInput: {
         flex: 1,
         padding: 4,

@@ -1,4 +1,7 @@
 /**
+ * Created by Tong on 2017/5/30.
+ */
+/**
  * Created by Tong on 2017/5/24.
  */
 import React, { Component } from 'react';
@@ -33,10 +36,10 @@ const APP_ID = 'H1Y1tHCMNNAdvAx6EMMNNvCJ-gzGzoHsz';
 const APP_KEY = 'OhXxC9b2HhnXFlXM9KPnoi4X';
 AV.initialize(APP_ID, APP_KEY);
 let file={};
-export default class NewWiki extends Component{
+export default class UserSet extends Component{
     static navigationOptions = ({ navigation }) => ({
         headerTitle: (
-            <Text style={{color:'white',fontSize:16,marginLeft:10}}>新建百科</Text>
+            <Text style={{color:'white',fontSize:16,marginLeft:10}}>个人设置</Text>
         ),
 
         headerStyle: { backgroundColor: color.theme,height:50 },
@@ -222,97 +225,92 @@ export default class NewWiki extends Component{
     }
     render() {
         return (
-       <View style={{ flex: 1, backgroundColor: 'white' }}>
-           <ScrollView
-               refreshControl={
+            <View style={{ flex: 1, backgroundColor: 'white' }}>
+                <ScrollView
+                    refreshControl={
                         <RefreshControl
                             refreshing={this.state.isRefreshing}
                             onRefresh={() => this.onHeaderRefresh()}
                             tintColor='gray'
                         />
                     }>
-               <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>书名</Text>
-               <AutoGrowingTextInput
-                   underlineColorAndroid='#666666'
-                   style={styles.textInput}
-                   placeholder={'请输入书名'}
-                   placeholderTextColor='#bfbfbf'
-                   maxHeight={200}
-                   onChangeText={(newText) => this.updateTextInputValuebookname(newText)}
+                    <View style={[styles.item, {flexDirection:'row',}]}>
+                        <Text style={[styles.font,{flex:1}]}>{'头像'}</Text>
+                        <TouchableOpacity style={{alignItems: 'center',justifyContent: 'center',backgroundColor:color.littlegray,
+                                 marginRight:10,height:60,width:60,borderRadius:1}}
+                                          onPress={this.selectPhotoTapped.bind(this)}>
+                            <Image source={require('../../img/picture.png')} style={{height:30,width:30,resizeMode: 'stretch',}}/>
+                            <Text style={{color:'#666666',fontSize: 12,marginTop:5}}>{"添加图片"}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{height:2,backgroundColor:color.background}}/>
 
-               />
+
+                    <Text style={{fontSize: 15,margin:10,}}>昵称</Text>
+                    <AutoGrowingTextInput
+                        underlineColorAndroid='#666666'
+                        style={styles.textInput}
+                        placeholder={'请输入昵称'}
+                        placeholderTextColor='#bfbfbf'
+                        maxHeight={200}
+                        onChangeText={(newText) => this.updateTextInputValuebookname(newText)}
+
+                    />
 
 
-               <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>作者</Text>
-               <AutoGrowingTextInput
-                   underlineColorAndroid='#666666'
-                   placeholderTextColor='#bfbfbf'
-                   style={styles.textInput}
-                   placeholder={'请输入书名'}
-                   maxHeight={200}
-                   onChangeText={(newText) => this.updateTextInputValuebookname(newText)}
+                    <Text style={{fontSize: 15,margin:10,}}>标签</Text>
+                    <AutoGrowingTextInput
+                        underlineColorAndroid='#666666'
+                        placeholderTextColor='#bfbfbf'
+                        style={styles.textInput}
+                        placeholder={'请输入标签'}
+                        maxHeight={200}
+                        onChangeText={(newText) => this.updateTextInputValuebookname(newText)}
 
-               />
+                    />
 
-               <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>试读</Text>
+                    <Text style={{fontSize: 15,margin:10,}}>电话</Text>
 
-               <AutoGrowingTextInput
-                   underlineColorAndroid='#666666'
-                   placeholderTextColor='#bfbfbf'
-                   style={styles.textInput}
-                   placeholder={'请输入试读内容'}
-                   maxHeight={200}
-                   onChangeText={(newText) => this.updateTextInputValueread(newText)}
+                    <AutoGrowingTextInput
+                        underlineColorAndroid='#666666'
+                        placeholderTextColor='#bfbfbf'
+                        style={styles.textInput}
+                        placeholder={'请输入电话'}
+                        maxHeight={200}
+                        onChangeText={(newText) => this.updateTextInputValueread(newText)}
 
-               />
+                    />
 
-               <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>内容简介</Text>
-               <AutoGrowingTextInput
-                   underlineColorAndroid='#666666'
-                   placeholderTextColor='#bfbfbf'
-                   style={styles.textInput}
-                   placeholder={'请输入内容简介'}
-                   maxHeight={200}
-                   onChangeText={(newText) => this.updateTextInputValuebook(newText)}
+                    <Text style={{fontSize: 15,margin:10,}}>地区</Text>
+                    <AutoGrowingTextInput
+                        underlineColorAndroid='#666666'
+                        placeholderTextColor='#bfbfbf'
+                        style={styles.textInput}
+                        placeholder={'请输入地区'}
+                        maxHeight={200}
+                        onChangeText={(newText) => this.updateTextInputValuebook(newText)}
 
-               />
+                    />
 
-               <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>作者简介</Text>
-               <AutoGrowingTextInput
-                   underlineColorAndroid='#666666'
-                   placeholderTextColor='#bfbfbf'
-                   style={styles.textInput}
-                   placeholder={'请输入作者简介'}
-                   maxHeight={200}
-                   onChangeText={(newText) => this.updateTextInputValueauthor(newText)}
+                    <View style={[styles.item, {flexDirection:'row',}]}>
+                        <Text style={[styles.font,{flex:1}]}>{'相册'}</Text>
+                        <TouchableOpacity style={{alignItems: 'center',justifyContent: 'center',backgroundColor:color.littlegray,
+                                 marginRight:10,height:60,width:60,borderRadius:1}}
+                                          onPress={this.selectPhotoTapped.bind(this)}>
+                            <Image source={require('../../img/picture.png')} style={{height:30,width:30,resizeMode: 'stretch',}}/>
+                            <Text style={{color:'#666666',fontSize: 12,marginTop:5}}>{"添加图片"}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{height:2,backgroundColor:color.border}}/>
 
-               />
-               <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>出版时间</Text>
-               <AutoGrowingTextInput
-                   underlineColorAndroid='#666666'
-                   placeholderTextColor='#bfbfbf'
-                   style={styles.textInput}
-                   placeholder={'请输入书名'}
-                   maxHeight={200}
-                   onChangeText={(newText) => this.updateTextInputValuebookname(newText)}
-
-               />
-
-               <TouchableOpacity style={{alignItems: 'center',justifyContent: 'center',backgroundColor:color.littlegray,
-                                 marginLeft:15,marginTop:20,height:80,width:80,borderRadius:1}}
-                                 onPress={this.selectPhotoTapped.bind(this)}>
-                   <Image source={require('../../img/picture.png')} style={{height:36,width:36,resizeMode: 'stretch',}}/>
-                   <Text style={{color:'#666666',fontSize: 14,marginTop:5}}>{"添加图片"}</Text>
-               </TouchableOpacity>
-
-               <View style={styles.ItemViewButtom}>
-                   <TouchableOpacity style={styles.loginView} onPress={()=>this.submit()} >
-                       <Text style={styles.loginbutton}>{"提交"}</Text>
-                   </TouchableOpacity>
-               </View>
-               <View style={{height:100,backgroundColor: 'white'}}/>
-           </ScrollView>
-       </View>
+                    <View style={styles.ItemViewButtom}>
+                        <TouchableOpacity style={styles.loginView} onPress={()=>this.submit()} >
+                            <Text style={styles.loginbutton}>{"提交"}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{height:100,backgroundColor: 'white'}}/>
+                </ScrollView>
+            </View>
         );
     }
 
@@ -323,115 +321,31 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: color.background
     },
-    recommendHeader: {
-        height: 35,
+    item:{
+        height:80,
         justifyContent: 'center',
-        borderWidth: screen.onePixel,
-        borderColor: color.border,
-        paddingVertical: 8,
-        paddingLeft: 20,
-        backgroundColor: 'white'
+        // borderTopWidth: Util.pixel,
+        borderTopColor: '#ddd',
+        backgroundColor:'#fff',
+        alignItems:'center',
     },
-    searchBar: {
-        width: screen.width * 0.7,
-        height: 30,
-        borderRadius: 19,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'red',
-        alignSelf: 'center',
+    font:{
+        fontSize:15,
+        marginLeft:10,
+        marginRight:10,
+    },
+    wrapper:{
+    },
+    tag:{
+        marginLeft:10,
+        fontSize:16,
+        fontWeight:'bold'
     },
     searchIcon: {
         marginLeft: 8,
         width: 27,
         height: 27
 
-    },
-    searchPicture: {
-        width: 80,
-        height: 80,
-        margin: 5,
-    },
-    // header: {
-    //     backgroundColor: color.theme,
-    //     paddingBottom: 20
-    // },
-    icon: {
-        width: 27,
-        height: 27,
-    },
-    userContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        margin: 10,
-    },
-    avatar: {
-        width: 50,
-        height: 50,
-        marginRight: 10,
-        borderRadius: 25,
-        borderWidth: 2,
-        borderColor: '#51D3C6'
-    },
-    ItemTextInput:{
-        flex:1,
-        flexDirection:'row',
-        height:44,
-        textAlign:'center'
-    },
-    title: {
-        fontSize:16,
-        textAlign:'center',
-        color:'white',
-    },
-    header: {
-        width:window.width,
-        height: 44,
-        backgroundColor: color.theme,
-        flexDirection:'row',
-        justifyContent:'center',
-        alignItems:'center',
-    },
-    searchBox: {
-        borderRadius: 5,  // 设置圆角边
-        flex:1,
-        flexDirection: 'row',
-        backgroundColor: 'white',
-        marginLeft: 5,
-        marginRight: 5,
-    },
-    inputText: {
-        flex: 1,
-        backgroundColor: 'transparent',
-        height:36,
-        flexDirection:'row',
-        textAlign:'center',
-        marginLeft:40
-
-    },
-    search: {
-        height: 44,
-        flexDirection:'row',
-        justifyContent:'space-around',
-        alignItems:'center',
-    },
-    searchcontainer: {
-        width:window.width,
-        flexDirection: 'row',   // 水平排布
-        height:44,
-        paddingLeft: 5,
-        paddingRight: 5,
-        backgroundColor: '#ECEDF1',
-        alignItems: 'center'  // 使元素垂直居中排布, 当flexDirection为column时, 为水平居中
-    },
-    textInput: {
-        flex: 1,
-        paddingLeft:15,
-        height: 40,
-        fontSize: 13,
-        marginRight: 8,
-        marginLeft:10,
     },
     loginbutton:{
         fontSize: 15,

@@ -1,4 +1,7 @@
 /**
+ * Created by Tong on 2017/5/30.
+ */
+/**
  * Created by Tong on 2017/5/24.
  */
 import React, { Component } from 'react';
@@ -33,10 +36,10 @@ const APP_ID = 'H1Y1tHCMNNAdvAx6EMMNNvCJ-gzGzoHsz';
 const APP_KEY = 'OhXxC9b2HhnXFlXM9KPnoi4X';
 AV.initialize(APP_ID, APP_KEY);
 let file={};
-export default class NewWiki extends Component{
+export default class SetWiki extends Component{
     static navigationOptions = ({ navigation }) => ({
         headerTitle: (
-            <Text style={{color:'white',fontSize:16,marginLeft:10}}>新建百科</Text>
+            <Text style={{color:'white',fontSize:16,marginLeft:10}}>修改百科</Text>
         ),
 
         headerStyle: { backgroundColor: color.theme,height:50 },
@@ -222,97 +225,97 @@ export default class NewWiki extends Component{
     }
     render() {
         return (
-       <View style={{ flex: 1, backgroundColor: 'white' }}>
-           <ScrollView
-               refreshControl={
+            <View style={{ flex: 1, backgroundColor: 'white' }}>
+                <ScrollView
+                    refreshControl={
                         <RefreshControl
                             refreshing={this.state.isRefreshing}
                             onRefresh={() => this.onHeaderRefresh()}
                             tintColor='gray'
                         />
                     }>
-               <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>书名</Text>
-               <AutoGrowingTextInput
-                   underlineColorAndroid='#666666'
-                   style={styles.textInput}
-                   placeholder={'请输入书名'}
-                   placeholderTextColor='#bfbfbf'
-                   maxHeight={200}
-                   onChangeText={(newText) => this.updateTextInputValuebookname(newText)}
+                    <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>书名</Text>
+                    <AutoGrowingTextInput
+                        underlineColorAndroid='#666666'
+                        style={styles.textInput}
+                        placeholder={'请输入书名'}
+                        placeholderTextColor='#bfbfbf'
+                        maxHeight={200}
+                        onChangeText={(newText) => this.updateTextInputValuebookname(newText)}
 
-               />
+                    />
 
 
-               <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>作者</Text>
-               <AutoGrowingTextInput
-                   underlineColorAndroid='#666666'
-                   placeholderTextColor='#bfbfbf'
-                   style={styles.textInput}
-                   placeholder={'请输入书名'}
-                   maxHeight={200}
-                   onChangeText={(newText) => this.updateTextInputValuebookname(newText)}
+                    <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>作者</Text>
+                    <AutoGrowingTextInput
+                        underlineColorAndroid='#666666'
+                        placeholderTextColor='#bfbfbf'
+                        style={styles.textInput}
+                        placeholder={'请输入书名'}
+                        maxHeight={200}
+                        onChangeText={(newText) => this.updateTextInputValuebookname(newText)}
 
-               />
+                    />
 
-               <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>试读</Text>
+                    <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>试读</Text>
 
-               <AutoGrowingTextInput
-                   underlineColorAndroid='#666666'
-                   placeholderTextColor='#bfbfbf'
-                   style={styles.textInput}
-                   placeholder={'请输入试读内容'}
-                   maxHeight={200}
-                   onChangeText={(newText) => this.updateTextInputValueread(newText)}
+                    <AutoGrowingTextInput
+                        underlineColorAndroid='#666666'
+                        placeholderTextColor='#bfbfbf'
+                        style={styles.textInput}
+                        placeholder={'请输入试读内容'}
+                        maxHeight={200}
+                        onChangeText={(newText) => this.updateTextInputValueread(newText)}
 
-               />
+                    />
 
-               <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>内容简介</Text>
-               <AutoGrowingTextInput
-                   underlineColorAndroid='#666666'
-                   placeholderTextColor='#bfbfbf'
-                   style={styles.textInput}
-                   placeholder={'请输入内容简介'}
-                   maxHeight={200}
-                   onChangeText={(newText) => this.updateTextInputValuebook(newText)}
+                    <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>内容简介</Text>
+                    <AutoGrowingTextInput
+                        underlineColorAndroid='#666666'
+                        placeholderTextColor='#bfbfbf'
+                        style={styles.textInput}
+                        placeholder={'请输入内容简介'}
+                        maxHeight={200}
+                        onChangeText={(newText) => this.updateTextInputValuebook(newText)}
 
-               />
+                    />
 
-               <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>作者简介</Text>
-               <AutoGrowingTextInput
-                   underlineColorAndroid='#666666'
-                   placeholderTextColor='#bfbfbf'
-                   style={styles.textInput}
-                   placeholder={'请输入作者简介'}
-                   maxHeight={200}
-                   onChangeText={(newText) => this.updateTextInputValueauthor(newText)}
+                    <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>作者简介</Text>
+                    <AutoGrowingTextInput
+                        underlineColorAndroid='#666666'
+                        placeholderTextColor='#bfbfbf'
+                        style={styles.textInput}
+                        placeholder={'请输入作者简介'}
+                        maxHeight={200}
+                        onChangeText={(newText) => this.updateTextInputValueauthor(newText)}
 
-               />
-               <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>出版时间</Text>
-               <AutoGrowingTextInput
-                   underlineColorAndroid='#666666'
-                   placeholderTextColor='#bfbfbf'
-                   style={styles.textInput}
-                   placeholder={'请输入书名'}
-                   maxHeight={200}
-                   onChangeText={(newText) => this.updateTextInputValuebookname(newText)}
+                    />
+                    <Text style={{fontSize: 16,margin:10,color:color.littlegray}}>出版时间</Text>
+                    <AutoGrowingTextInput
+                        underlineColorAndroid='#666666'
+                        placeholderTextColor='#bfbfbf'
+                        style={styles.textInput}
+                        placeholder={'请输入书名'}
+                        maxHeight={200}
+                        onChangeText={(newText) => this.updateTextInputValuebookname(newText)}
 
-               />
+                    />
 
-               <TouchableOpacity style={{alignItems: 'center',justifyContent: 'center',backgroundColor:color.littlegray,
+                    <TouchableOpacity style={{alignItems: 'center',justifyContent: 'center',backgroundColor:color.littlegray,
                                  marginLeft:15,marginTop:20,height:80,width:80,borderRadius:1}}
-                                 onPress={this.selectPhotoTapped.bind(this)}>
-                   <Image source={require('../../img/picture.png')} style={{height:36,width:36,resizeMode: 'stretch',}}/>
-                   <Text style={{color:'#666666',fontSize: 14,marginTop:5}}>{"添加图片"}</Text>
-               </TouchableOpacity>
+                                      onPress={this.selectPhotoTapped.bind(this)}>
+                        <Image source={require('../../img/picture.png')} style={{height:36,width:36,resizeMode: 'stretch',}}/>
+                        <Text style={{color:'#666666',fontSize: 14,marginTop:5}}>{"添加图片"}</Text>
+                    </TouchableOpacity>
 
-               <View style={styles.ItemViewButtom}>
-                   <TouchableOpacity style={styles.loginView} onPress={()=>this.submit()} >
-                       <Text style={styles.loginbutton}>{"提交"}</Text>
-                   </TouchableOpacity>
-               </View>
-               <View style={{height:100,backgroundColor: 'white'}}/>
-           </ScrollView>
-       </View>
+                    <View style={styles.ItemViewButtom}>
+                        <TouchableOpacity style={styles.loginView} onPress={()=>this.submit()} >
+                            <Text style={styles.loginbutton}>{"提交"}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{height:100,backgroundColor: 'white'}}/>
+                </ScrollView>
+            </View>
         );
     }
 

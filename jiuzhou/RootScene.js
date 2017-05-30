@@ -39,12 +39,15 @@ import DeatailMoments from './page/Contact/DeatailMoments';
 import WikiScene from './page/Wiki/WikiScene';
 import NewWiki from './page/Wiki/NewWiki';
 import MyWiki from './page/Wiki/MyWiki';
+import SetWiki from './page/Wiki/SetWiki';
 
 import MomentsScene from './page/Moments/MomentsScene';
 import NewMoments from './page/Moments/NewMoments';
 
 
 import MineScene from './page/Mine/MineScene';
+import UserSet from './page/Mine/UserSet';
+import AddFriend from './page/Mine/AddFriend';
 
 
 class YinDao extends Component {
@@ -172,8 +175,7 @@ const MyApp = TabNavigator({
 
 const Navigator = StackNavigator(
     {
-        Home:{ screen:YinDao },
-
+        YinDao:{ screen:YinDao },
         Login:{ screen:Login },
         Register:{ screen:Register },
         SMSLogin:{ screen:SMSLogin },
@@ -183,6 +185,9 @@ const Navigator = StackNavigator(
         NewWiki:{ screen:NewWiki },
         DeatailMoments:{ screen:DeatailMoments },
         NewMoments:{ screen:NewMoments },
+        SetWiki:{ screen:SetWiki },
+        UserSet:{ screen:UserSet },
+        AddFriend:{ screen:AddFriend },
 
 
         MyApp:{ screen:MyApp },

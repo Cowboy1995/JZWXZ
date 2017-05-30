@@ -14,7 +14,9 @@ import {
     Button,
     ListView,
     ScrollView,
-    RefreshControl
+    RefreshControl,
+    StatusBar,
+    PixelRatio
 }from 'react-native';
 import screen from '../../common/screen';
 import color from '../../common/color';
@@ -25,7 +27,10 @@ import DetailCell from '../../common/DetailCell';
 
 import {Paragraph,Heading1, Heading2,} from '../../common/Text';
 import NavigationItem from '../../common/NavigationItem';
-
+import AV from 'leancloud-storage';
+const APP_ID = 'H1Y1tHCMNNAdvAx6EMMNNvCJ-gzGzoHsz';
+const APP_KEY = 'OhXxC9b2HhnXFlXM9KPnoi4X';
+AV.initialize(APP_ID, APP_KEY);
 // // 获取输入框的内容inputContent
 // let inputContent = "他妈的tmdfuckk";
 //
@@ -60,6 +65,7 @@ export default class WikiScene extends Component {
             <NavigationItem
                 icon={require('../../img/set.png')}
                 onPress={() => {
+                    navigation.navigate('UserSet')
                 }}
             />
         ),
@@ -115,8 +121,12 @@ export default class WikiScene extends Component {
     }
 
     renderHeader() {
+        const { navigate } = this.props.navigation;
+
         return (
+
             <View style={styles.header}>
+
                 <View style={styles.userContainer}>
                     <Image style={styles.avatar} source={require('../../img/Mine/avatar.png')} />
                     <View>
@@ -124,7 +134,9 @@ export default class WikiScene extends Component {
                             <Heading1 style={{ color: 'white' }}>素敌</Heading1>
                             <Image style={{ marginLeft: 4 }} source={require('../../img/Mine/beauty_technician_v15@2x.png')} />
                         </View>
-                        <Paragraph style={{ color: 'white', marginTop: 4 }}>个人信息 ></Paragraph>
+                        <TouchableOpacity onPress={()=>navigate('ContactDetail')}>
+                            <Paragraph style={{ color: 'white', marginTop: 4 }}>个人信息 ></Paragraph>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -132,9 +144,31 @@ export default class WikiScene extends Component {
     }
 
     render() {
+        const { navigate } = this.props.navigation;
+
+        let colors = ['#F4000B', '#17B4FF', '#FFD900','#666666','#1EA114'];
+        let tags = ['C', 'A',  'W','M'];
+        let items = ['修改密码', '增加联系人',  '我的百科','个人相册'];
+        let components = ['SetPassword','AddFriend', 'MyWiki', 'DeatailMoments',''];
+        let JSXDOM = [];
+        for(let i in items){
+            JSXDOM.push(
+                <TouchableOpacity key={items[i]} onPress={()=>navigate(components[i])}>
+                    {/*<View style={{height:1,backgroundColor:'#ddd',}}/>*/}
+
+                    <View style={[styles.item, {flexDirection:'row',marginTop:10}]}>
+                        <Text style={[styles.tag, {color: colors[i]}]}>{tags[i]}</Text>
+                        <Text style={[styles.font,{flex:1}]}>{items[i]}</Text>
+                        <Image style={{marginRight: 10,width: 16,height: 16}}
+                               source={{uri: 'http://image-2.plusman.cn/app/im-client/arrow.png'}} />
+                    </View>
+                </TouchableOpacity>
+            );
+        }
+
         return (
             <View style={{ flex: 1, backgroundColor: color.background }}>
-                <View style={{ position: 'absolute', width: screen.width, height: screen.height / 2, backgroundColor: color.theme }} />
+                <View style={{ position: 'absolute', width: screen.width, height: screen.height / 2, backgroundColor: color.background }} />
                 <ScrollView
                     refreshControl={
                         <RefreshControl
@@ -144,39 +178,36 @@ export default class WikiScene extends Component {
                         />
                     }>
                     {this.renderHeader()}
-                    <SpacingView />
-                    {this.renderCells()}
+                    {/*<SpacingView />*/}
+                    <View style={styles.wrapper}>
+                        {JSXDOM}
+                    </View>
+                    <View style={{marginTop:30}}>
+                        <TouchableOpacity onPress={()=>{
+                            AV.User.logOut();
+                            ToastAndroid.show('退出成功', ToastAndroid.SHORT);
+
+                            navigate('YinDao')
+                        }}>
+                            <View style={[styles.item, {flexDirection:'row'}]}>
+                                <Text style={[styles.tag, {color: colors[4]}]}>Q</Text>
+                                <Text style={[styles.font,{flex:1}]}>退出登录</Text>
+                                <Image style={{marginRight: 10,width: 16,height: 16}}
+                                       source={{uri: 'http://image-2.plusman.cn/app/im-client/arrow.png'}} />
+                            </View>
+                        </TouchableOpacity>
+                    </View>
                 </ScrollView>
             </View>
         );
     }
 
-    getDataList() {
-        return (
-            [
-                [
-                    { title: '我的钱包', subtitle: '办信用卡', image: require('../../img/Mine/icon_mine_wallet@2x.png') },
-                    { title: '余额', subtitle: '￥95872385', image: require('../../img/Mine/icon_mine_balance@2x.png') },
-                    { title: '抵用券', subtitle: '63', image: require('../../img/Mine/icon_mine_voucher@2x.png') },
-                    { title: '会员卡', subtitle: '2', image: require('../../img/Mine/icon_mine_membercard@2x.png') }
-                ],
-                [
-                    { title: '好友去哪', image: require('../../img/Mine/icon_mine_friends@2x.png') },
-                    { title: '我的评价', image: require('../../img/Mine/icon_mine_comment@2x.png') },
-                    { title: '我的收藏', image: require('../../img/Mine/icon_mine_collection@2x.png') },
-                    { title: '会员中心', subtitle: 'v15', image: require('../../img/Mine/icon_mine_membercenter@2x.png') },
-                    { title: '积分商城', subtitle: '好礼已上线', image: require('../../img/Mine/icon_mine_member@2x.png') }
-                ],
-                [
-                    { title: '客服中心', image: require('../../img/Mine/icon_mine_customerService@2x.png') },
-                ]
-            ]
-        )
-    }
 
 
 
 }
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -227,5 +258,29 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         borderWidth: 2,
         borderColor: '#51D3C6'
+    },
+    // container:{
+    //     flex:1,
+    //     backgroundColor:'#F5F5F5',
+    // },
+    item:{
+        height:44,
+        justifyContent: 'center',
+        // borderTopWidth: Util.pixel,
+        borderTopColor: '#ddd',
+        backgroundColor:'#fff',
+        alignItems:'center',
+    },
+    font:{
+        fontSize:15,
+        marginLeft:10,
+        marginRight:10,
+    },
+    wrapper:{
+    },
+    tag:{
+        marginLeft:10,
+        fontSize:16,
+        fontWeight:'bold'
     }
 });

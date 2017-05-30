@@ -112,8 +112,6 @@ export default class WikiScene extends Component {
         })
     }
     componentDidMount() {
-
-
         // let query = new AV.Query('Wiki');
         // query.startsWith('bookname', '九州铁浮图');
         // // 以bookname查询
@@ -200,11 +198,11 @@ export default class WikiScene extends Component {
 
 
                     <Text style={{fontSize: 14,marginLeft:15,marginTop:30,color:color.littlegray}}>简介</Text>
-                    <Text style={{fontSize: 16,marginLeft:15,marginTop:10,marginRight:15,}}>{Book.book}</Text>
+                    <Text style={{fontSize: 16,marginLeft:15,marginTop:10,marginRight:15,}}>{"        "+Book.book}</Text>
                     <Text style={{fontSize: 14,marginLeft:15,marginTop:20,color:color.littlegray}}>作者</Text>
-                    <Text style={{fontSize: 16,marginLeft:15,marginTop:10,marginRight:15,}}>{Book.author}</Text>
+                    <Text style={{fontSize: 16,marginLeft:15,marginTop:10,marginRight:15,}}>{"        "+Book.author}</Text>
                     <Text style={{fontSize: 14,marginLeft:15,marginTop:30,color:color.littlegray,}}>试读</Text>
-                    <Text style={{fontSize: 16,marginLeft:15,marginTop:10,marginRight:15,}}>{Book.read}</Text>
+                    <Text style={{fontSize: 16,marginLeft:15,marginTop:10,marginRight:15,}}>{"        "+Book.read}</Text>
                     <View>
 
                     </View>

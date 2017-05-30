@@ -116,7 +116,6 @@ export default class ContactDetail extends Component {
                 paddingHorizontal: 15,paddingVertical: 10,}}>
                     <Text style={{textAlign:'center',}}>个人相册</Text>
                     <Image style={styles.img1} source={{uri: 'http://ac-H1Y1tHCM.clouddn.com/6df75d13deb886f74f04.jpg'}} />
-
                 </View>
 
                 <View style={{height:1,backgroundColor:color.gray}}/>
@@ -125,10 +124,20 @@ export default class ContactDetail extends Component {
                     <Text style={{textAlign:'center',}}>更多</Text>
                 </View>
                 <View style={styles.ItemViewButtom}>
+                    <TouchableOpacity style={styles.loginView1} onPress={()=>{
+                        ToastAndroid.show('删除成功', ToastAndroid.SHORT);
+                        this.props.navigation.goBack(null)
+
+                    }}>
+                        <Text style={{color:'white'}}>{"删除好友"}</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.ItemViewButtom}>
                     <TouchableOpacity style={styles.loginView} onPress={()=>navigate('DeatailMoments')}>
                         <Text style={{color:'white'}}>{"查看朋友圈"}</Text>
                     </TouchableOpacity>
                 </View>
+
             </View>
 
 
@@ -187,7 +196,16 @@ const styles = StyleSheet.create({
         width:screen.width-20,
         borderRadius:5,
     },
-    ItemViewButtom:{
+    loginView1:{
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor:'#999999',
+        marginTop:15,
+        height:44,
+        width:screen.width-20,
+        borderRadius:5,
+    },
+    ItemViewButtom1:{
         flexDirection:'row',
         justifyContent:'space-around',
         alignItems:'center',

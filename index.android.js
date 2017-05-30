@@ -13,7 +13,8 @@ import {
     View,
     Image,
     ScrollView,
-    CameraRoll, } from 'react-native';
+    CameraRoll,
+    StatusBar} from 'react-native';
 
 import RootScene from './src/RootScene';
 import Navigator from './jiuzhou/RootScene';
@@ -84,77 +85,17 @@ var fetchParams = {
 
 //默认应用的容器组件
 class App extends Component {
-    //构造函数
-    constructor(props) {
-        super(props);
-        this.state = {
-            photos: null,
-            image: null
-        };
+    render(){
+        return(
+            <View style={{ flex: 1 }}>
+                <StatusBar barStyle="light-content" backgroundColor='#06C1AE' />
+                <Navigator />
+            </View>
+        )
     }
-
-    //页面的组件渲染完毕（render）之后执行
-    componentDidMount() {
-        var _that = this;
-        //获取照片
-        var promise = CameraRoll.getPhotos(fetchParams)
-        promise.then(function(data){
-            var edges = data.edges;
-            var photos = [];
-            var image = [];
-
-            for (var i in edges) {
-                photos.push(edges[i].node.image.uri);
-                image.push(edges[i].node.image);
-                console.log(image[0]);
-                console.log(edges[0].node.image)
-
-            }
-            _that.setState({
-                photos:photos,
-                image:image[0],
-            });
-        },function(err){
-            alert('获取照片失败！');
-        });
-        var file = new AV.File('image.jpg', {
-            blob: image
-        });
-        file.save()
-            .then(
-                () => console.log('图片上传成功'),
-                (err) => console.log('图片上传失败', err)
-            );
-    }
-
-    //渲染
-    render() {
-
-        var photos = this.state.photos || [];
-        var photosView = [];
-        for(var i = 0; i < 6 ; i += 2){
-            photosView.push(
-                <View key={i} style={styles.row}>
-                    <View style={styles.flex}>
-                        <Image resizeMode="stretch" style={styles.image} source={{uri:photos[i]}}/>
-                    </View>
-                    <View style={styles.flex}>
-                        <Image resizeMode="stretch" style={styles.image} source={{uri:photos[i+1]}}/>
-                    </View>
-                </View>
-            )
-        }
-
-        return (
-            <ScrollView>
-                <View style={styles.container}>
-                    {photosView}
-                </View>
-            </ScrollView>
-        );
-    }
-
 }
+
+
 
 //样式定义
 const styles = StyleSheet.create({
@@ -178,6 +119,6 @@ const styles = StyleSheet.create({
         borderColor: '#ddd'
     },
 });
-// AppRegistry.registerComponent('MeiTuan', () => App);
+AppRegistry.registerComponent('MeiTuan', () => App);
 
-AppRegistry.registerComponent('MeiTuan', () => Navigator);
+// AppRegistry.registerComponent('MeiTuan', () => Navigator);

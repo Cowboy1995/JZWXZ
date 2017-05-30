@@ -117,7 +117,7 @@ export default class MyWiki extends Component {
         this.setState({ isRefreshing: true });
         setTimeout(() => {
             this.setState({ isRefreshing: false })
-        }, 10000);
+        }, 3000);
         Tong.load({
             key:'User',
             autoSync: true,
@@ -129,6 +129,9 @@ export default class MyWiki extends Component {
             query.find().then(function (products) {
                 console.log(products);
                 details=products;
+                // this.setState({
+                //     isRefreshing:false
+                // })
                 // 查询到商品后，在前端展示到相应的位置中。
             }).catch(function(error) {
                 alert(JSON.stringify(error));
@@ -162,7 +165,7 @@ export default class MyWiki extends Component {
                     // setTimeout(() => {
                     //     this.setState({ isRefreshing: false })
                     // }, 2000);
-                    alert(1111)
+                    navigate('SetWiki')
 
                 },
             },
@@ -214,7 +217,7 @@ export default class MyWiki extends Component {
                         />
                     }>
 
-                    {
+                    {this.state.isRefreshing?null:
                         details.map((data,index)=>{
                             return(
                                 <View>
