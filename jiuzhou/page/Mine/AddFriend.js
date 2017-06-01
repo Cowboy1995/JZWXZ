@@ -30,6 +30,7 @@ import AV from 'leancloud-storage';
 const APP_ID = 'H1Y1tHCMNNAdvAx6EMMNNvCJ-gzGzoHsz';
 const APP_KEY = 'OhXxC9b2HhnXFlXM9KPnoi4X';
 AV.initialize(APP_ID, APP_KEY);
+let id='';
 
 export default class AddFriend extends Component{
     static navigationOptions = ({ navigation, }) => ({
@@ -54,25 +55,54 @@ export default class AddFriend extends Component{
         this.state = {
             trueSwitchIsOn: true,
             falseSwitchIsOn: false,
-            PHONE:'',
-            alertMessage1:'',
-            alertMessage2:'',
-            DEALERINFO_ID:'',
+            phone:'',
         };
     }
 
-    fetchData(){
 
-    };
-    addAssistant=()=>{}
 
-    ;
-
-    updateTextInputValuePHONE(newText){
-        this.setState({PHONE: newText});
+    updateTextInputValuephone(newText){
+        this.setState({phone: newText});
     }
-    JumpDeleteAssistant=()=>{
-    };
+
+    addFriend=()=>{
+        const  navigation = this.props.navigation;
+        Tong.load({
+            key:'friend',
+            autoSync: true,
+            syncInBackground: true
+        }).then(ret => {
+            id=ret.id;
+            console.log(id);
+            let query = new AV.Query('_User');
+            query.equalTo('mobilePhoneNumber', this.state.phone);
+            query.find().then(function (result) {
+                // 第一个参数是 className，第二个参数是 objectId
+                console.log(result);
+                let todo = AV.Object.createWithoutData('friend', id);
+                // 修改属性
+                todo.addUnique('fid', result[0].id);
+                todo.addUnique('cid', result[0].id);
+                // 保存到云端
+                todo.save().then(function () {
+                    navigation.goBack(null);
+                    ToastAndroid.show('添加成功', ToastAndroid.SHORT);
+                });
+            })
+        }).catch(err => {
+            console.warn(err.message);
+            switch (err.name) {
+                case 'NotFoundError':
+                    // TODO;
+                    break;
+                case 'ExpiredError':
+                    // TODO
+                    break;
+            }
+        });
+
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -91,7 +121,7 @@ export default class AddFriend extends Component{
 
                 <TouchableOpacity
                     style={styles.submit}
-                    onPress={this._checkMessage}>
+                    onPress={this.addFriend}>
                     <Text style={styles.submitbutton}>{"下一步"}</Text>
                 </TouchableOpacity>
             </View>

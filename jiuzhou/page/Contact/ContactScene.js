@@ -18,7 +18,11 @@ import {
 }from 'react-native';
 import screen from '../../common/screen';
 import color from '../../common/color';
-let data=[
+import AV from 'leancloud-storage';
+const APP_ID = 'H1Y1tHCMNNAdvAx6EMMNNvCJ-gzGzoHsz';
+const APP_KEY = 'OhXxC9b2HhnXFlXM9KPnoi4X';
+AV.initialize(APP_ID, APP_KEY);
+let date=[
     {avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_15.png",name: "Aaron", phone: "12345678978",userId: 158},
     {avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_16.png",name: "Bailey", phone: "12345678978",userId: 158},
     {avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_17.png",name: "Cady", phone: "12345678978",userId: 158},
@@ -53,11 +57,30 @@ export default class ContactScene extends Component {
 
     componentDidMount(){
         const { navigate } = this.props.navigation;
-        this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(data),
-            navigate:navigate,
 
+        Tong.load({
+            key:'contact',
+            autoSync: true,
+            syncInBackground: true
+        }).then(ret => {
+            console.log(ret.date);
+            this.setState({
+                dataSource: this.state.dataSource.cloneWithRows(ret.date),
+                navigate:navigate,
+            });
+
+        }).catch(err => {
+            console.warn(err.message);
+            switch (err.name) {
+                case 'NotFoundError':
+                    // TODO;
+                    break;
+                case 'ExpiredError':
+                    // TODO
+                    break;
+            }
         });
+
     }
 
     onRefresh = async () => {
@@ -78,9 +101,9 @@ export default class ContactScene extends Component {
             <View>
                 <TouchableOpacity onPress={() => this.state.navigate('ContactDetail')}>
                     <View style={styles.root}>
-                        <Image style={styles.img} source={{uri: rowData.avatar}} />
+                        {/*<Image style={styles.img} source={{uri: rowData.avatar}} />*/}
                         <View style={styles.content}>
-                            <Text style={styles.name}>{rowData.name}</Text>
+                            <Text style={styles.name}>{rowData.username}</Text>
                         </View>
                         <Image style={{marginLeft: 10,width: 16,height: 16}}
                                source={{uri: 'http://image-2.plusman.cn/app/im-client/arrow.png'}} />
@@ -96,7 +119,7 @@ export default class ContactScene extends Component {
 
 
     render() {
-
+        console.log(this.state.dataSource);
         return (
             <View style={{flex:1}}>
                 <View style={styles.header}>

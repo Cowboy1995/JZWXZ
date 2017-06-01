@@ -70,6 +70,60 @@ if (!__DEV__) {
         error: () => {},
     };
 }
+
+// let fid = ['59278d4a44d90400640eb132', '59147e9aac502e006c5ce045'];
+//
+// let todo = new AV.Object('friend');
+// // 指定 reminders 是做一个 Date 对象数组
+// todo.addUnique('fid', fid);
+// todo.save().then(function (todo) {
+//     console.log(todo.id);
+// }, function (error) {
+//     // 异常处理
+//     console.error(error);
+// });
+
+// let fid = ['593030442f301e0058280390'];
+// let myid = '593030442f301e0058280390';
+// let friend = new AV.Object('friend');
+// // 指定 reminders 是做一个 Date 对象数组
+// friend.addUnique('fid', fid);
+// friend.set('myid', myid);
+// friend.save();
+
+// let id=[];
+// let vv=[];
+// let query = new AV.Query('friend');
+// query.equalTo('myid', '111');
+// query.select(['fid']);
+// query.first().then(function (data) {
+//     id=data.get('fid');
+//     console.log(id);
+//     let newquery = new AV.Query('moments');
+//     newquery.containedIn('qwe', id);
+//     newquery.find().then(function (aaa) {
+//         console.log(aaa);
+//
+//     })
+// });
+
+// let id=[];
+// let vv=[];
+// let query = new AV.Query('friend');
+// query.equalTo('myid', '111');
+// query.select(['fid']);
+// query.first().then(function (data) {
+//     id=data.get('fid');
+//     console.log(id);
+//     let newquery = new AV.Query('moments');
+//     newquery.containedIn('qwe', id);
+//     newquery.find().then(function (aaa) {
+//         console.log(aaa);
+//
+//     })
+// });
+
+
 // export default class MeiTuan extends Component {
 //     render() {
 //         return (
@@ -78,10 +132,6 @@ if (!__DEV__) {
 //     }
 // }
 // AppRegistry.registerComponent('MeiTuan', () => MeiTuan);
-var fetchParams = {
-    first: 6,
-    assetType: 'Photos'
-}
 
 //默认应用的容器组件
 class App extends Component {
@@ -95,30 +145,6 @@ class App extends Component {
     }
 }
 
-
-
-//样式定义
-const styles = StyleSheet.create({
-    flex:{
-        flex:1
-    },
-    container: {
-        flex: 1,
-        paddingTop: 30,
-        alignItems:'center'
-    },
-    row:{
-        flexDirection: 'row'
-    },
-    image:{
-        height: 120,
-        marginTop: 10,
-        marginLeft: 5,
-        marginRight: 5,
-        borderWidth: 1,
-        borderColor: '#ddd'
-    },
-});
 AppRegistry.registerComponent('MeiTuan', () => App);
 
 // AppRegistry.registerComponent('MeiTuan', () => Navigator);

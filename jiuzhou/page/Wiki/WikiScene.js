@@ -104,6 +104,8 @@ export default class WikiScene extends Component {
             ToastAndroid.show('搜索不到该书', ToastAndroid.SHORT);
         });
 
+
+
     }
     hiden(value){
         this.setState({
@@ -112,17 +114,32 @@ export default class WikiScene extends Component {
         })
     }
     componentDidMount() {
-        // let query = new AV.Query('Wiki');
-        // query.startsWith('bookname', '九州铁浮图');
-        // // 以bookname查询
-        // query.find().then(function (Wiki) {
-        //     Book=Wiki[0].attributes;
-        //     console.log(Book);
-        //     console.log(Book.picture.attributes.url);
-        //     picture=Book.picture.attributes.url;
-        // }).catch(function(error) {
-        //     alert(JSON.stringify(error));
+        // let ww = new AV.Object('friend');
+        // // 指定 reminders 是做一个 Date 对象数组
+        // let reminders = ['59278d4a44d90400640eb132', '59147e9aac502e006c5ce045'];
+        // ww.addUnique('reminders', reminders);
+        // ww.save().then(function (ww) {
+        // }, function (error) {
+        //     // 异常处理
         // });
+        // let Test = AV.Object.extend('test');
+        // // AV.Object.extend('className') 所需的参数 className 则表示对应的表名
+        // // 声明一个类型
+        // let test = new Test();
+        // // 新建对象
+        //
+        // test.set('owner', AV.User.currentAsync());
+        // // // 设置百科创建者
+        // test.set('data', 258);
+        // test.save().then(function() {
+        //     ToastAndroid.show('上传成功', ToastAndroid.SHORT);
+        //     // 保存成功
+        // }, function(error) {
+        //     alert(JSON.stringify(error));
+        //     //保存失败
+        //     // alert(error)
+        // });
+
 
     }
     //监听TextInput中书名的变化

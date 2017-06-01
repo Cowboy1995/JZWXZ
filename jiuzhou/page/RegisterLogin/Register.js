@@ -84,8 +84,24 @@ export default class Register extends Component {
             //设置密码
             user.setMobilePhoneNumber(this.state.phone);
             //设置电话
-            user.signUp();
+            user.signUp().then(function (result) {
+                console.log(result);
+                let fid = [result.id];
+                let myid = result.id;
+                let friend = new AV.Object('friend');
+                // 指定 reminders 是做一个 Date 对象数组
+                friend.addUnique('fid', fid);
+                friend.set('myid', myid);
+                friend.save().then(function (result) {
+                    console.log(result.id);
+                }, function (error) {
+                    // 异常处理
+                    console.error(error);
+                });
+            });
             //注册
+
+
             this.timer=setTimeout(()=>{ this.setState({disabled: false})},60000);
             this.timer1=setInterval(()=>{
                 this.setState({Time:this.state.Time-1});
@@ -121,6 +137,7 @@ export default class Register extends Component {
             AV.User.verifyMobilePhone(this.state.check).then(function(){
                 //调用AV.User.verifyMobilePhone验证短信
                 navigation.goBack();
+                ToastAndroid.show('注册成功', ToastAndroid.SHORT);
                 //验证成功返回登陆页面
             }, function(err){
                 //验证失败

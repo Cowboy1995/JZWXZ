@@ -39,7 +39,22 @@ export default class Login extends Component {
             login:false,
         };
     }
-
+    componentDidMount() {
+        // let GuangZhou = new AV.Object('moments');// 广州
+        // GuangZhou.set('name', '北京');
+        // GuangZhou.set('dependent', AV.User.current());// 为广州设置 dependent 属性为广东
+        // GuangZhou.save().then(function (guangZhou) {
+        //     console.log(guangZhou.id);
+        // });
+        // let GuangDong = AV.Object.createWithoutData('_User', '59278d4a44d90400640eb132');
+        // let query = new AV.Query('moments');
+        // query.equalTo('dependent', GuangDong);
+        // query.find().then(function (cities) {
+        //     cities.forEach(function (city, i, a) {
+        //         console.log(city.id);
+        //     });
+        // });
+    }
     //登录按钮跳转到主页面
     JumpMainScreen=()=> {
         const { navigate } = this.props.navigation;
@@ -52,18 +67,50 @@ export default class Login extends Component {
             //判断密码是否为空，为空提示用户输入密码
         }else {
             AV.User.logIn(this.state.USERNAME, this.state.PASSWORD).then(function (loginedUser) {
-                console.log(loginedUser.updatedAt);
                 //调用AV.User.logIn方法进行帐号密码登陆
                 const {id}=loginedUser;
+                console.log(id);
+                let query = new AV.Query('friend');
+                query.equalTo('myid', id);
+                query.select(['cid']);
+                query.first().then(function (data) {
+                    let cid=data.get('cid');
+                    console.log(cid);
+                    let newquery = new AV.Query('_User');
+                    newquery.containedIn('objectId', cid);
+                    newquery.find().then(function (aaa) {
+                        Tong.save({
+                            key: 'contact',  // 注意:请不要在key中使用_下划线符号!
+                            data: {
+                                date:aaa,
+                            },
+                        })
+                    })
+                });
                 //把经销商登录信息存储下来
                 Tong.save({
                     key: 'User',  // 注意:请不要在key中使用_下划线符号!
                     data: {
                         id:id,
                     },
-                }).then(()=>navigate('MyApp'));
-                //登陆成功跳转到主页面
-                ToastAndroid.show('登录成功', ToastAndroid.SHORT);
+                }).then(()=>{
+                    let query = new AV.Query('friend');
+                    query.equalTo('myid', id);
+                    query.find(function (result) {
+                        console.log(result);
+                        const {id}=result;
+                        Tong.save({
+                            key: 'friend',  // 注意:请不要在key中使用_下划线符号!
+                            data: {
+                                id:id,
+                            },
+                        }).then(()=>{
+                            navigate('MyApp');
+                            //登陆成功跳转到主页面
+                            ToastAndroid.show('登录成功', ToastAndroid.SHORT);
+                        });
+                    })
+                });
             }, function (error) {
                 ToastAndroid.show('用户名密码错误', ToastAndroid.SHORT);
                 //登陆失败返回帐号或密码错误
