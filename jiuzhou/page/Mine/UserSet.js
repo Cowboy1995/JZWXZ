@@ -36,6 +36,8 @@ const APP_ID = 'H1Y1tHCMNNAdvAx6EMMNNvCJ-gzGzoHsz';
 const APP_KEY = 'OhXxC9b2HhnXFlXM9KPnoi4X';
 AV.initialize(APP_ID, APP_KEY);
 let file={};
+let file1={};
+
 export default class UserSet extends Component{
     static navigationOptions = ({ navigation }) => ({
         headerTitle: (
@@ -62,12 +64,9 @@ export default class UserSet extends Component{
 
         this.state = {
             isRefreshing: false,
-            bookname:'',
-            book:'',
-            author:'',
-            read:'',
-            owner:'',
-            id:'',
+            nickname:'',
+            tag:'',
+            area:'',
             images: [],
         }
     }
@@ -82,80 +81,43 @@ export default class UserSet extends Component{
     //
     //
     submit(){
-        this.setState({ isRefreshing: true });
-        setTimeout(() => {
-            this.setState({ isRefreshing: false })
-        }, 10000);
-
-        let Wiki = AV.Object.extend('Wiki');
-        // AV.Object.extend('className') 所需的参数 className 则表示对应的表名
-        // 声明一个类型
-        let wiki = new Wiki();
-        // 新建对象
-        let name = file.fileName;
-        let avFile = new AV.File(name,  {
-            blob: {
-                uri: file.uri,
-            },
-        });
-        console.log(avFile);
-        wiki.set('bookname', this.state.bookname);
-        // 设置书名
-        wiki.set('book', this.state.book);
-        // 设置内容简介
-        wiki.set('author', this.state.author);
-        // 设置作者简介
-        wiki.set('owner', AV.User.currentAsync());
-        // // 设置百科创建者
-        wiki.set('ids', this.state.id);
-        // // 设置百科创建者
-        wiki.set('read', this.state.read);
-        // 设置试读
-        wiki.set('picture', avFile);
-        wiki.save().then(function() {
-            ToastAndroid.show('上传成功', ToastAndroid.SHORT);
-            // 保存成功
-        }, function(error) {
-            alert(JSON.stringify(error));
-            //保存失败
-            // alert(error)
-        });
-
-    }
-    // //监听TextInput中书名的变化
-    updateTextInputValuebookname(newText){
-        this.setState({bookname: newText});
-    }
-    updateTextInputValuebook(newText){
-        this.setState({book: newText});
-    }
-    updateTextInputValueauthor(newText){
-        this.setState({author: newText});
-    }
-    updateTextInputValueread(newText){
-        this.setState({read: newText});
-    }
-    componentDidMount() {
+        // this.setState({ isRefreshing: true });
+        // setTimeout(() => {
+        //     this.setState({ isRefreshing: false })
+        // }, 10000);
+        const  navigation = this.props.navigation;
         Tong.load({
             key:'User',
-            // autoSync(默认为true)意味着在没有找到数据或数据过期时自动调用相应的sync方法
             autoSync: true,
-            // syncInBackground(默认为true)意味着如果数据过期，
-            // 在调用sync方法的同时先返回已经过期的数据。
-            // 设置为false的话，则始终强制返回sync方法提供的最新数据(当然会需要更多等待时间)。
             syncInBackground: true
         }).then(ret => {
-            // 如果找到数据，则在then方法中返回
-            // 注意：这是异步返回的结果（不了解异步请自行搜索学习）
-            // 你只能在then这个方法内继续处理ret数据
-            // 而不能在then以外处理
-            // 也没有办法“变成”同步返回
-            // 你也可以使用“看似”同步的async/await语法
-            this.setState({id:ret.id});
-            console.log(ret.id);
+            let id=ret.id;
+            let avFile = new AV.File(file.fileName,  {
+                blob: {
+                    uri: file.uri,
+                },
+            });
+            let avFile1 = new AV.File(file1.fileName,  {
+                blob: {
+                    uri: file1.uri,
+                },
+            });
+            let todo = AV.Object.createWithoutData('_User', id);
+            todo.set('nickname', this.state.nickname);
+            todo.set('tag', this.state.tag);
+            todo.set('area', this.state.area);
+            todo.set('avatar', avFile);
+            todo.set('album', avFile1);
+            todo.save().then(function() {
+                ToastAndroid.show('上传成功', ToastAndroid.SHORT);
+                navigation.goBack(null);
+                // 保存成功
+            }, function(error) {
+                alert(JSON.stringify(error));
+                //保存失败
+                // alert(error)
+            });
         }).catch(err => {
-            //如果没有找到数据且没有sync方法，
-            //或者有其他异常，则在catch中返回
             console.warn(err.message);
             switch (err.name) {
                 case 'NotFoundError':
@@ -167,21 +129,70 @@ export default class UserSet extends Component{
             }
         });
     }
+
+    componentDidMount() {
+        Tong.load({
+            key:'User',
+            autoSync: true,
+            syncInBackground: true
+        }).then(ret => {
+            this.setState({id:ret.id});
+            console.log(ret.id);
+        }).catch(err => {
+            console.warn(err.message);
+            switch (err.name) {
+                case 'NotFoundError':
+                    // TODO;
+                    break;
+                case 'ExpiredError':
+                    // TODO
+                    break;
+            }
+        });
+    }
+    selectPhotoTapped1() {
+        const options = {
+            quality: 1.0,
+            maxWidth: 500,
+            maxHeight: 500,
+            storageOptions: {
+                skipBackup: true
+            }
+        };
+
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+            file1=response;
+            if (response.didCancel) {
+                console.log('User cancelled photo picker');
+            }
+            else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            }
+            else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            }
+            else {
+                let source;
+
+                // You can display the image using either:
+                //source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
+
+                //Or:
+                if (Platform.OS === 'android') {
+                    source = {uri: response.uri, isStatic: true};
+                } else {
+                    source = {uri: response.uri.replace('file://', ''), isStatic: true};
+                }
+
+                this.setState({
+                    avatarSource1: source,
+                    IMAGE1:response.data,
+                });
+            }
+        });
+    }
     selectPhotoTapped() {
-        // CameraRoll.getPhotos({
-        //     first: 1
-        // }, (data) => {
-        //     var edge = data.edges[0];
-        //     var image = edge.node.image;
-        //     var file = new AV.File('image.jpg', {
-        //         blob: image
-        //     });
-        //     file.save()
-        //         .then(
-        //             () => console.log('图片上传成功'),
-        //             (err) => console.log('图片上传失败', err)
-        //         );
-        // }, console.log);
         const options = {
             quality: 1.0,
             maxWidth: 500,
@@ -223,6 +234,16 @@ export default class UserSet extends Component{
             }
         });
     }
+    // //监听TextInput中书名的变化
+    updateTextInputValueNickName(newText){
+        this.setState({nickname: newText});
+    }
+    updateTextInputValueTag(newText){
+        this.setState({tag: newText});
+    }
+    updateTextInputValueArea(newText){
+        this.setState({area: newText});
+    }
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -253,7 +274,7 @@ export default class UserSet extends Component{
                         placeholder={'请输入昵称'}
                         placeholderTextColor='#bfbfbf'
                         maxHeight={200}
-                        onChangeText={(newText) => this.updateTextInputValuebookname(newText)}
+                        onChangeText={(newText) => this.updateTextInputValueNickName(newText)}
 
                     />
 
@@ -265,21 +286,20 @@ export default class UserSet extends Component{
                         style={styles.textInput}
                         placeholder={'请输入标签'}
                         maxHeight={200}
-                        onChangeText={(newText) => this.updateTextInputValuebookname(newText)}
+                        onChangeText={(newText) => this.updateTextInputValueTag(newText)}
 
                     />
+                    {/*<Text style={{fontSize: 15,margin:10,}}>电话</Text>*/}
 
-                    <Text style={{fontSize: 15,margin:10,}}>电话</Text>
+                    {/*<AutoGrowingTextInput*/}
+                        {/*underlineColorAndroid='#666666'*/}
+                        {/*placeholderTextColor='#bfbfbf'*/}
+                        {/*style={styles.textInput}*/}
+                        {/*placeholder={'请输入电话'}*/}
+                        {/*maxHeight={200}*/}
+                        {/*onChangeText={(newText) => this.updateTextInputValuephone(newText)}*/}
 
-                    <AutoGrowingTextInput
-                        underlineColorAndroid='#666666'
-                        placeholderTextColor='#bfbfbf'
-                        style={styles.textInput}
-                        placeholder={'请输入电话'}
-                        maxHeight={200}
-                        onChangeText={(newText) => this.updateTextInputValueread(newText)}
-
-                    />
+                    {/*/>*/}
 
                     <Text style={{fontSize: 15,margin:10,}}>地区</Text>
                     <AutoGrowingTextInput
@@ -288,7 +308,7 @@ export default class UserSet extends Component{
                         style={styles.textInput}
                         placeholder={'请输入地区'}
                         maxHeight={200}
-                        onChangeText={(newText) => this.updateTextInputValuebook(newText)}
+                        onChangeText={(newText) => this.updateTextInputValueArea(newText)}
 
                     />
 
@@ -296,7 +316,7 @@ export default class UserSet extends Component{
                         <Text style={[styles.font,{flex:1}]}>{'相册'}</Text>
                         <TouchableOpacity style={{alignItems: 'center',justifyContent: 'center',backgroundColor:color.littlegray,
                                  marginRight:10,height:60,width:60,borderRadius:1}}
-                                          onPress={this.selectPhotoTapped.bind(this)}>
+                                          onPress={this.selectPhotoTapped1.bind(this)}>
                             <Image source={require('../../img/picture.png')} style={{height:30,width:30,resizeMode: 'stretch',}}/>
                             <Text style={{color:'#666666',fontSize: 12,marginTop:5}}>{"添加图片"}</Text>
                         </TouchableOpacity>

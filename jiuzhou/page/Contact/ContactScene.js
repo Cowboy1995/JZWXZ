@@ -96,12 +96,12 @@ export default class ContactScene extends Component {
     };
 
 
-    _renderRow (rowData) {
+    _renderRow (rowData,rowID) {
         return (
             <View>
-                <TouchableOpacity onPress={() => this.state.navigate('ContactDetail')}>
+                <TouchableOpacity onPress={() => this.state.navigate('ContactDetail',{data:rowData})}>
                     <View style={styles.root}>
-                        {/*<Image style={styles.img} source={{uri: rowData.avatar}} />*/}
+                        <Image style={styles.img} source={{uri: rowData.avatar.url}} />
                         <View style={styles.content}>
                             <Text style={styles.name}>{rowData.username}</Text>
                         </View>

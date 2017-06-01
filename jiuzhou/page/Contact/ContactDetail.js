@@ -21,7 +21,7 @@ import {
 }from 'react-native';
 import screen from '../../common/screen';
 import color from '../../common/color';
-let data=[
+let date=[
     {area:'浙江    宁波',biaoqian:'高中同学',avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_15.png",name: "Aaron",nickname:"Aaaa", phone: "12345678978",userId: 158},
     {avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_16.png",name: "Bailey",nickname:"Bbbb", phone: "12345678978",userId: 158},
     {avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_17.png",name: "Cady",nickname:"Aaaa", phone: "12345678978",userId: 158},
@@ -35,6 +35,9 @@ let data=[
     {avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_08.png",name: "Yancey", phone: "12345678978",userId: 158},
 
 ]
+let data=[];
+let avatar='';
+let album='';
 
 export default class ContactDetail extends Component {
     static navigationOptions = ({ navigation, }) => ({
@@ -59,16 +62,46 @@ export default class ContactDetail extends Component {
         super(props);
         this.state = {
             refreshing: false,
-            dataSource: new ListView.DataSource({
-                rowHasChanged: (row1, row2) => row1 !== row2,
-            }),
         };
 
     }
     componentDidMount(){
-        this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(data),
-        });
+        this.setState({ isRefreshing: true });
+        setTimeout(() => {
+            this.setState({ isRefreshing: false })
+        }, 3000);
+        const { state } = this.props.navigation;
+        console.log(state.params.data);
+        data=state.params.data;
+        avatar=data.avatar.url;
+        album=data.album.url;
+
+        console.log(avatar);
+
+        console.log(album);
+
+        // Tong.load({
+        //     key:'contact',
+        //     autoSync: true,
+        //     syncInBackground: true
+        // }).then(ret => {
+        //     console.log(ret.date);
+        //     this.setState({
+        //         dataSource: this.state.dataSource.cloneWithRows(ret.date),
+        //         navigate:navigate,
+        //     });
+        //
+        // }).catch(err => {
+        //     console.warn(err.message);
+        //     switch (err.name) {
+        //         case 'NotFoundError':
+        //             // TODO;
+        //             break;
+        //         case 'ExpiredError':
+        //             // TODO
+        //             break;
+        //     }
+        // });
     }
 
     render() {
@@ -77,14 +110,15 @@ export default class ContactDetail extends Component {
         return (
             <View style={{flex:1}}>
 
+
                 <View style={{height:20,backgroundColor:color.gray}}/>
                     <View style={styles.root}>
-                        <Image style={styles.img} source={{uri: data[1].avatar}} />
+                        <Image style={styles.img} source={{uri: avatar}} />
                         <View style={styles.content}>
-                            <Text style={styles.name}>{data[1].nickname}</Text>
+                            <Text style={styles.name}>{data.username}</Text>
                             <View style={styles.priceAndControls}>
                                 {/*<Text style={styles.price}>￥{price.toFixed(2)}</Text>*/}
-                                <Text style={{fontSize:14,color:color.littlegray}}>{'昵称：'+data[1].name}</Text>
+                                <Text style={{fontSize:14,color:color.littlegray}}>{'昵称：'+data.nickname}</Text>
                             </View>
                         </View>
                     <View style={{height:1,backgroundColor:color.white,}}/>
@@ -94,28 +128,28 @@ export default class ContactDetail extends Component {
                 <View style={{height:40,backgroundColor:'white',alignItems: 'center',flexDirection: 'row',
                 paddingHorizontal: 15,paddingVertical: 10,}}>
                     <Text style={{textAlign:'center',}}>标签</Text>
-                    <Text style={{fontSize:14,color:color.littlegray,marginLeft:55}}>{data[0].biaoqian}</Text>
+                    <Text style={{fontSize:14,color:color.littlegray,marginLeft:55}}>{data.tag}</Text>
                 </View>
 
                 <View style={{height:20,backgroundColor:color.gray}}/>
                 <View style={{height:40,backgroundColor:'white',alignItems: 'center',flexDirection: 'row',
                 paddingHorizontal: 15,paddingVertical: 10,}}>
                     <Text style={{textAlign:'center',}}>电话</Text>
-                    <Text style={{fontSize:14,color:color.littlegray,marginLeft:55}}>{data[0].phone}</Text>
+                    <Text style={{fontSize:14,color:color.littlegray,marginLeft:55}}>{data.mobilePhoneNumber}</Text>
                 </View>
 
                 <View style={{height:20,backgroundColor:color.gray}}/>
                 <View style={{height:40,backgroundColor:'white',alignItems: 'center',flexDirection: 'row',
                 paddingHorizontal: 15,paddingVertical: 10,}}>
                     <Text style={{textAlign:'center',}}>地区</Text>
-                    <Text style={{fontSize:14,color:color.littlegray,marginLeft:55}}>{data[0].area}</Text>
+                    <Text style={{fontSize:14,color:color.littlegray,marginLeft:55}}>{data.area}</Text>
                 </View>
 
                 <View style={{height:1,backgroundColor:color.gray}}/>
                 <View style={{height:80,backgroundColor:'white',alignItems: 'center',flexDirection: 'row',
                 paddingHorizontal: 15,paddingVertical: 10,}}>
                     <Text style={{textAlign:'center',}}>个人相册</Text>
-                    <Image style={styles.img1} source={{uri: 'http://ac-H1Y1tHCM.clouddn.com/6df75d13deb886f74f04.jpg'}} />
+                    <Image style={styles.img1} source={{uri: album}} />
                 </View>
 
                 <View style={{height:1,backgroundColor:color.gray}}/>

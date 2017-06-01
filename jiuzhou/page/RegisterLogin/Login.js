@@ -79,6 +79,8 @@ export default class Login extends Component {
                     let newquery = new AV.Query('_User');
                     newquery.containedIn('objectId', cid);
                     newquery.find().then(function (aaa) {
+                        console.log(aaa);
+
                         Tong.save({
                             key: 'contact',  // 注意:请不要在key中使用_下划线符号!
                             data: {
