@@ -36,7 +36,7 @@ let date=[
     {avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_08.png",name: "Yancey", phone: "12345678978",userId: 158},
 
 ]
-
+let dt=[];
 export default class ContactScene extends Component {
     static navigationOptions = ({ navigation }) => ({
         header:null,
@@ -47,7 +47,7 @@ export default class ContactScene extends Component {
     constructor(props: Object) {
         super(props);
         this.state = {
-            refreshing: false,
+            isRefreshing: false,
             dataSource: new ListView.DataSource({
                 rowHasChanged: (row1, row2) => row1 !== row2,
             }),
@@ -83,17 +83,44 @@ export default class ContactScene extends Component {
 
     }
 
-    onRefresh = async () => {
-        // this.setState({
-        //     refreshing: true
-        // });
+    onHeaderRefresh() {
+        this.setState({ isRefreshing: true });
         //
-        // await profileStore.getOnlineList();
-        //
-        // this.setState({
-        //     refreshing: false
-        // });
-    };
+        Tong.load({
+            key:'User',
+            autoSync: true,
+            syncInBackground: true
+        }).then(ret => {
+            let query = new AV.Query('friend');
+            query.equalTo('myid', ret.id);
+            query.select(['cid']);
+            query.first().then(function (data) {
+                let cid=data.get('cid');
+                // console.log(cid);
+                let newquery = new AV.Query('_User');
+                newquery.containedIn('objectId', cid);
+                newquery.find().then(function (aaa) {
+                    console.log(aaa);
+                    Tong.save({
+                        key: 'contact',  // 注意:请不要在key中使用_下划线符号!
+                        data: {
+                            date:aaa,
+                        },
+                    })
+                })
+            });
+        });
+        Tong.load({
+            key:'contact',
+            autoSync: true,
+            syncInBackground: true
+        }).then(ret => {
+            this.setState({
+                dataSource: this.state.dataSource.cloneWithRows(ret.date),
+                isRefreshing: false
+            });
+        })
+    }
 
 
     _renderRow (rowData,rowID) {
@@ -119,7 +146,6 @@ export default class ContactScene extends Component {
 
 
     render() {
-        console.log(this.state.dataSource);
         return (
             <View style={{flex:1}}>
                 <View style={styles.header}>
@@ -147,6 +173,13 @@ export default class ContactScene extends Component {
                     dataSource={this.state.dataSource}
                     renderRow={this._renderRow.bind(this)}
                     enableEmptySections={true}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.isRefreshing}
+                            onRefresh={() => this.onHeaderRefresh()}
+                            tintColor='gray'
+                        />
+                    }
                 />
             </View>
 

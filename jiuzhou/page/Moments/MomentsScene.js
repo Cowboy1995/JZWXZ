@@ -18,6 +18,10 @@ import {
 }from 'react-native';
 import screen from '../../common/screen';
 import color from '../../common/color';
+import AV from 'leancloud-storage';
+const APP_ID = 'H1Y1tHCMNNAdvAx6EMMNNvCJ-gzGzoHsz';
+const APP_KEY = 'OhXxC9b2HhnXFlXM9KPnoi4X';
+AV.initialize(APP_ID, APP_KEY);
 let data=[
     {time:'Thu May 25 2017 01:38:45 ',area:'浙江    宁波',biaoqian:'高中同学',avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_15.png",name: "Aaron",nickname:"Aaaa", phone: "12345678978",userId: 158},
     {time:'Thu May 24 2017 11:25:59 ',avatar: "http://image-2.plusman.cn/app/im-client/avatar/tuzki_16.png",name: "Bailey",nickname:"Bbbb", phone: "12345678978",userId: 158},
@@ -43,7 +47,7 @@ export default class MomentsScene extends Component {
     constructor(props: Object) {
         super(props);
         this.state = {
-            refreshing: false,
+            isRefreshing: false,
             dataSource: new ListView.DataSource({
                 rowHasChanged: (row1, row2) => row1 !== row2,
             }),
@@ -51,11 +55,101 @@ export default class MomentsScene extends Component {
 
     }
     componentDidMount(){
-        this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(data),
+        const { navigate } = this.props.navigation;
+        Tong.load({
+            key:'moment',
+            autoSync: true,
+            syncInBackground: true
+        }).then(ret => {
+            console.log(ret.date);
+            this.setState({
+                dataSource: this.state.dataSource.cloneWithRows(ret.date),
+                navigate:navigate,
+            });
+        }).catch(err => {
+            console.warn(err.message);
+            switch (err.name) {
+                case 'NotFoundError':
+                    // TODO;
+                    break;
+                case 'ExpiredError':
+                    // TODO
+                    break;
+            }
         });
     }
 
+    onHeaderRefresh() {
+        this.setState({ isRefreshing: true });
+        //
+        Tong.load({
+            key:'User',
+            autoSync: true,
+            syncInBackground: true
+        }).then(ret => {
+            let query1 = new AV.Query('friend');
+            query1.equalTo('myid', ret.id);
+            query1.select(['fid']);
+            query1.first().then(function (data) {
+                let fid = data.get('fid');
+                console.log(fid);
+                let newquery = new AV.Query('moments');
+                newquery.containedIn('mid', fid);
+                newquery.find().then(function (result) {
+                    Tong.save({
+                        key: 'moment',  // 注意:请不要在key中使用_下划线符号!
+                        data: {
+                            date:result,
+                        },
+                    })
+                });
+            })
+        });
+        Tong.load({
+            key:'moment',
+            autoSync: true,
+            syncInBackground: true
+        }).then(ret => {
+            this.setState({
+                dataSource: this.state.dataSource.cloneWithRows(ret.date),
+                isRefreshing: false
+            });
+        })
+    }
+
+
+    _renderRow (rowData) {
+        return (
+            <View style={{backgroundColor:'white'}}>
+                <View style={{height:20,backgroundColor:color.gray}}/>
+                <View style={styles.root}>
+                    <Image style={styles.img} source={{uri: rowData.avatar.url}} />
+                    <View style={styles.content}>
+                        <Text style={styles.name}>{rowData.username}</Text>
+                        <View style={styles.priceAndControls}>
+                            {/*<Text style={styles.price}>￥{price.toFixed(2)}</Text>*/}
+                            <Text style={{fontSize:12,color:color.littlegray}}>{rowData.createdAt}</Text>
+                        </View>
+                    </View>
+                    <View style={{height:1,backgroundColor:color.white,}}/>
+                </View>
+                {/*<Image style={styles.img1} source={require('../../img/s1.jpg')} />*/}
+
+                <Image source={{uri: rowData.picture.url}} style={{marginLeft:63,marginTop:10,height:200,width:150,resizeMode: 'stretch',
+}}
+                />
+                <Image source={require('../../img/message.png')} style={{marginLeft:screen.width-35,marginTop:10,height:25,width:25,}}
+                />
+                <View style={{height:40,backgroundColor:color.LittleGrey,alignItems: 'center',flexDirection: 'row',
+                paddingHorizontal: 15,paddingVertical: 10,marginLeft:63,marginRight:13,marginTop:5}}>
+                    {/*<Text style={{fontSize:13,color:color.ziti}}>{data[0].nickname+':'}</Text>*/}
+                    <Text style={{fontSize:13,}}>{rowData.comment}</Text>
+                </View>
+                <View style={{height:0.5,backgroundColor:color.littlegray,marginTop:20}}/>
+            </View>
+
+        );
+    }
     render() {
         const { navigate } = this.props.navigation;
 
@@ -70,60 +164,49 @@ export default class MomentsScene extends Component {
                         />
                     </TouchableOpacity>
                 </View>
-                <ScrollView >
-                    <View style={{flex:1,backgroundColor:'white'}}>
-                        <View style={{height:20,backgroundColor:color.gray}}/>
-                        <View style={styles.root}>
-                            <Image style={styles.img} source={{uri: data[1].avatar}} />
-                            <View style={styles.content}>
-                                <Text style={styles.name}>{data[1].nickname}</Text>
-                                <View style={styles.priceAndControls}>
-                                    {/*<Text style={styles.price}>￥{price.toFixed(2)}</Text>*/}
-                                    <Text style={{fontSize:12,color:color.littlegray}}>{data[0].time}</Text>
-                                </View>
-                            </View>
-                            <View style={{height:1,backgroundColor:color.white,}}/>
-                        </View>
-                        {/*<Image style={styles.img1} source={require('../../img/s1.jpg')} />*/}
+                <ListView
+                    style={styles.container}
+                    dataSource={this.state.dataSource}
+                    renderRow={this._renderRow.bind(this)}
+                    enableEmptySections={true}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.isRefreshing}
+                            onRefresh={() => this.onHeaderRefresh()}
+                            tintColor='gray'
+                        />
+                    }
+                />
+                {/*<ScrollView >*/}
+                    {/*<View style={{flex:1,backgroundColor:'white'}}>*/}
 
-                        <Image source={{uri: 'http://ac-H1Y1tHCM.clouddn.com/6df75d13deb886f74f04.jpg'}} style={{marginLeft:63,marginTop:10,height:200,width:150,resizeMode: 'stretch',
-}}
-                        />
-                        <Image source={require('../../img/message.png')} style={{marginLeft:screen.width-35,marginTop:10,height:25,width:25,}}
-                        />
-                        <View style={{height:40,backgroundColor:color.LittleGrey,alignItems: 'center',flexDirection: 'row',
-                paddingHorizontal: 15,paddingVertical: 10,marginLeft:63,marginRight:13,marginTop:5}}>
-                            <Text style={{fontSize:13,color:color.ziti}}>{data[0].nickname+':'}</Text>
-                            <Text style={{fontSize:13,}}>{'九州铁浮图真好看！'}</Text>
-                        </View>
-                        <View style={{height:0.5,backgroundColor:color.littlegray,marginTop:10}}/>
 
-                        <View style={{height:20,backgroundColor:color.gray}}/>
-                        <View style={styles.root}>
-                            <Image style={styles.img} source={{uri: data[0].avatar}} />
-                            <View style={styles.content}>
-                                <Text style={styles.name}>{data[0].nickname}</Text>
-                                <View style={styles.priceAndControls}>
-                                    {/*<Text style={styles.price}>￥{price.toFixed(2)}</Text>*/}
-                                    <Text style={{fontSize:12,color:color.littlegray}}>{data[1].time}</Text>
-                                </View>
-                            </View>
-                            <View style={{height:1,backgroundColor:color.white,}}/>
-                        </View>
-                        {/*<Image style={styles.img1} source={require('../../img/s1.jpg')} />*/}
+                        {/*<View style={{height:20,backgroundColor:color.gray}}/>*/}
+                        {/*<View style={styles.root}>*/}
+                            {/*<Image style={styles.img} source={{uri: data[0].avatar}} />*/}
+                            {/*<View style={styles.content}>*/}
+                                {/*<Text style={styles.name}>{data[0].nickname}</Text>*/}
+                                {/*<View style={styles.priceAndControls}>*/}
+                                    {/*/!*<Text style={styles.price}>￥{price.toFixed(2)}</Text>*!/*/}
+                                    {/*<Text style={{fontSize:12,color:color.littlegray}}>{data[1].time}</Text>*/}
+                                {/*</View>*/}
+                            {/*</View>*/}
+                            {/*<View style={{height:1,backgroundColor:color.white,}}/>*/}
+                        {/*</View>*/}
+                        {/*/!*<Image style={styles.img1} source={require('../../img/s1.jpg')} />*!/*/}
 
-                        <Image source={{uri: 'http://ac-h1y1thcm.clouddn.com/d48468017ebf5dbcba42.jpg'}} style={{marginLeft:63,marginTop:10,height:200,width:150,resizeMode: 'stretch',}}
-                        />
-                        <Image source={require('../../img/message.png')} style={{marginLeft:screen.width-35,marginTop:10,height:25,width:25,}}
-                        />
-                        <View style={{height:40,backgroundColor:color.LittleGrey,alignItems: 'center',flexDirection: 'row',
-                paddingHorizontal: 15,paddingVertical: 10,marginLeft:63,marginRight:13,marginTop:5}}>
-                            <Text style={{fontSize:13,color:color.ziti}}>{data[1].nickname+':'}</Text>
-                            <Text style={{fontSize:13,}}>{'今天看完了九州缥缈录'}</Text>
-                        </View>
-                        <View style={{height:0.5,backgroundColor:color.littlegray,marginTop:10}}/>
-                    </View>
-                </ScrollView>
+                        {/*<Image source={{uri: 'http://ac-h1y1thcm.clouddn.com/d48468017ebf5dbcba42.jpg'}} style={{marginLeft:63,marginTop:10,height:200,width:150,resizeMode: 'stretch',}}*/}
+                        {/*/>*/}
+                        {/*<Image source={require('../../img/message.png')} style={{marginLeft:screen.width-35,marginTop:10,height:25,width:25,}}*/}
+                        {/*/>*/}
+                        {/*<View style={{height:40,backgroundColor:color.LittleGrey,alignItems: 'center',flexDirection: 'row',*/}
+                {/*paddingHorizontal: 15,paddingVertical: 10,marginLeft:63,marginRight:13,marginTop:5}}>*/}
+                            {/*<Text style={{fontSize:13,color:color.ziti}}>{data[1].nickname+':'}</Text>*/}
+                            {/*<Text style={{fontSize:13,}}>{'今天看完了九州缥缈录'}</Text>*/}
+                        {/*</View>*/}
+                        {/*<View style={{height:0.5,backgroundColor:color.littlegray,marginTop:10}}/>*/}
+                    {/*</View>*/}
+                {/*</ScrollView>*/}
             </View>
 
 

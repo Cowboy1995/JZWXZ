@@ -52,7 +52,9 @@ AV.initialize(APP_ID, APP_KEY);
 // }
 // // 显示的内容--showInput
 // console.log(showContent);
-
+let data=[];
+let avatar=[];
+let tag=true;
 export default class WikiScene extends Component {
     static navigationOptions = ({ navigation }) => ({
         headerTitle: (
@@ -65,7 +67,7 @@ export default class WikiScene extends Component {
             <NavigationItem
                 icon={require('../../img/set.png')}
                 onPress={() => {
-                    navigation.navigate('UserSet')
+                    navigation.navigate('UserSet',{data:data,tag:tag})
                 }}
             />
         ),
@@ -88,16 +90,79 @@ export default class WikiScene extends Component {
         super(props)
 
         this.state = {
-            isRefreshing: false
+            isRefreshing: false,
+            avatar:''
         }
     }
 
-    onHeaderRefresh() {
-        this.setState({ isRefreshing: true })
+    componentDidMount(){
+        this.setState({ isRefreshing: true });
+        // setTimeout(() => {
+        //     this.setState({ isRefreshing: false })
+        // }, 3000);
+        Tong.load({
+            key:'User',
+            autoSync: true,
+            syncInBackground: true
+        }).then(ret => {
+            data=ret.detail;
+            avatar=data.avatar.url;
+            console.log(data);
+            this.setState({
+                isRefreshing: false,
+                avatar:avatar
+            })
+        }).catch(err => {
+            console.warn(err.message);
+            switch (err.name) {
+                case 'NotFoundError':
+                    // TODO;
+                    break;
+                case 'ExpiredError':
+                    // TODO
+                    break;
+            }
+        });
+    }
 
-        setTimeout(() => {
-            this.setState({ isRefreshing: false })
-        }, 2000);
+    onHeaderRefresh() {
+        this.setState({ isRefreshing: true });
+        // setTimeout(() => {
+        //     this.setState({ isRefreshing: false })
+        // }, 1000);
+        Tong.load({
+            key:'User',
+            autoSync: true,
+            syncInBackground: true
+        }).then(ret => {
+            let id=ret.id;
+            console.log(id);
+            let query = new AV.Query('_User');
+            query.equalTo('objectId', id);
+            query.first().then(function (result) {
+                console.log(result.attributes);
+                data=result.attributes;
+                avatar=data.avatar.attributes.url;
+                tag=false;
+                this.setState({
+                    avatar:avatar,
+                    isRefreshing: false,
+                })
+            })
+
+        }).catch(err => {
+            console.warn(err.message);
+            switch (err.name) {
+                case 'NotFoundError':
+                    // TODO;
+                    break;
+                case 'ExpiredError':
+                    // TODO
+                    break;
+            }
+        });
+
+
     }
 
     renderCells() {
@@ -128,13 +193,13 @@ export default class WikiScene extends Component {
             <View style={styles.header}>
 
                 <View style={styles.userContainer}>
-                    <Image style={styles.avatar} source={require('../../img/Mine/avatar.png')} />
+                    <Image style={styles.avatar} source={{uri: this.state.avatar}} />
                     <View>
                         <View style={{ flexDirection: 'row' }}>
-                            <Heading1 style={{ color: 'white' }}>素敌</Heading1>
+                            <Heading1 style={{ color: 'white' }}>{data.username}</Heading1>
                             <Image style={{ marginLeft: 4 }} source={require('../../img/Mine/beauty_technician_v15@2x.png')} />
                         </View>
-                        <TouchableOpacity onPress={()=>navigate('ContactDetail')}>
+                        <TouchableOpacity onPress={()=>navigate('MyDetail',{data:data,tag:tag})}>
                             <Paragraph style={{ color: 'white', marginTop: 4 }}>个人信息 ></Paragraph>
                         </TouchableOpacity>
                     </View>
@@ -148,7 +213,7 @@ export default class WikiScene extends Component {
 
         let colors = ['#F4000B', '#17B4FF', '#FFD900','#666666','#1EA114'];
         let tags = ['C', 'A',  'W','M'];
-        let items = ['修改密码', '增加联系人',  '我的百科','个人相册'];
+        let items = ['修改密码', '添加好友',  '我的百科','个人相册'];
         let components = ['SetPassword','AddFriend', 'MyWiki', 'DeatailMoments',''];
         let JSXDOM = [];
         for(let i in items){
@@ -177,26 +242,31 @@ export default class WikiScene extends Component {
                             tintColor='gray'
                         />
                     }>
-                    {this.renderHeader()}
-                    {/*<SpacingView />*/}
-                    <View style={styles.wrapper}>
-                        {JSXDOM}
-                    </View>
-                    <View style={{marginTop:30}}>
-                        <TouchableOpacity onPress={()=>{
+                    {this.state.isRefreshing?null:this.renderHeader()
+                    }
+                    {this.state.isRefreshing?null:
+                        <View>
+                            <View style={styles.wrapper}>
+                                {JSXDOM}
+                            </View>
+                            <View style={{marginTop:30}}>
+                                <TouchableOpacity onPress={()=>{
                             AV.User.logOut();
                             ToastAndroid.show('退出成功', ToastAndroid.SHORT);
 
                             navigate('YinDao')
                         }}>
-                            <View style={[styles.item, {flexDirection:'row'}]}>
-                                <Text style={[styles.tag, {color: colors[4]}]}>Q</Text>
-                                <Text style={[styles.font,{flex:1}]}>退出登录</Text>
-                                <Image style={{marginRight: 10,width: 16,height: 16}}
-                                       source={{uri: 'http://image-2.plusman.cn/app/im-client/arrow.png'}} />
+                                    <View style={[styles.item, {flexDirection:'row'}]}>
+                                        <Text style={[styles.tag, {color: colors[4]}]}>Q</Text>
+                                        <Text style={[styles.font,{flex:1}]}>退出登录</Text>
+                                        <Image style={{marginRight: 10,width: 16,height: 16}}
+                                               source={{uri: 'http://image-2.plusman.cn/app/im-client/arrow.png'}} />
+                                    </View>
+                                </TouchableOpacity>
                             </View>
-                        </TouchableOpacity>
-                    </View>
+                        </View>
+                    }
+
                 </ScrollView>
             </View>
         );
@@ -257,7 +327,8 @@ const styles = StyleSheet.create({
         marginRight: 10,
         borderRadius: 25,
         borderWidth: 2,
-        borderColor: '#51D3C6'
+        borderColor: '#51D3C6',
+
     },
     // container:{
     //     flex:1,

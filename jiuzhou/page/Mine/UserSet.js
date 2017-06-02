@@ -37,7 +37,9 @@ const APP_KEY = 'OhXxC9b2HhnXFlXM9KPnoi4X';
 AV.initialize(APP_ID, APP_KEY);
 let file={};
 let file1={};
-
+let nickname='';
+let tag='';
+let area='';
 export default class UserSet extends Component{
     static navigationOptions = ({ navigation }) => ({
         headerTitle: (
@@ -67,8 +69,33 @@ export default class UserSet extends Component{
             nickname:'',
             tag:'',
             area:'',
-            images: [],
+            images: true,
+            images1: true,
+
         }
+    }
+    componentDidMount() {
+        // this.setState({ isRefreshing: true });
+        // setTimeout(() => {
+        //     this.setState({ isRefreshing: false })
+        // }, 2000);
+        // const { state } = this.props.navigation;
+        // data=state.params.data;
+        // let i=state.params.tag;
+        // if (i){
+        //     nickname=data.nickname;
+        //     tag=data.tag;
+        //     area=data.area;
+        //
+        // }else {
+        //     nickname=data.attributes.nickname;
+        //     tag=data.attributes.tag;
+        //     area=data.attributes.area;
+        //
+        // }
+        // // album=data.album.attributes.url;
+        // console.log(nickname);
+
     }
 
     onHeaderRefresh() {
@@ -86,70 +113,63 @@ export default class UserSet extends Component{
         //     this.setState({ isRefreshing: false })
         // }, 10000);
         const  navigation = this.props.navigation;
-        Tong.load({
-            key:'User',
-            autoSync: true,
-            syncInBackground: true
-        }).then(ret => {
-            let id=ret.id;
-            let avFile = new AV.File(file.fileName,  {
-                blob: {
-                    uri: file.uri,
-                },
+        if(this.state.nickname.length===0){
+            ToastAndroid.show('请输入昵称', ToastAndroid.SHORT);
+            //判断用户名是否为空，为空提示用户输入用户名
+        }else if(this.state.tag.length===0){
+            ToastAndroid.show('请输入标签', ToastAndroid.SHORT);
+            //判断密码是否为空，为空提示用户输入密码
+        }else if(this.state.area.length===0){
+            ToastAndroid.show('请输入地区', ToastAndroid.SHORT);
+            //判断手机号是否为空，为空提示用户输入手机号
+        }else{
+            Tong.load({
+                key:'User',
+                autoSync: true,
+                syncInBackground: true
+            }).then(ret => {
+                let id=ret.id;
+                let avFile = new AV.File(file.fileName,  {
+                    blob: {
+                        uri: file.uri,
+                    },
+                });
+                let avFile1 = new AV.File(file1.fileName,  {
+                    blob: {
+                        uri: file1.uri,
+                    },
+                });
+                let todo = AV.Object.createWithoutData('_User', id);
+                todo.set('nickname', this.state.nickname);
+                todo.set('tag', this.state.tag);
+                todo.set('area', this.state.area);
+                todo.set('avatar', avFile);
+                todo.set('album', avFile1);
+                todo.save().then(function() {
+                    ToastAndroid.show('上传成功', ToastAndroid.SHORT);
+                    navigation.goBack(null);
+                    // 保存成功
+                }, function(error) {
+                    alert(JSON.stringify(error));
+                    //保存失败
+                    // alert(error)
+                });
+            }).catch(err => {
+                console.warn(err.message);
+                switch (err.name) {
+                    case 'NotFoundError':
+                        // TODO;
+                        break;
+                    case 'ExpiredError':
+                        // TODO
+                        break;
+                }
             });
-            let avFile1 = new AV.File(file1.fileName,  {
-                blob: {
-                    uri: file1.uri,
-                },
-            });
-            let todo = AV.Object.createWithoutData('_User', id);
-            todo.set('nickname', this.state.nickname);
-            todo.set('tag', this.state.tag);
-            todo.set('area', this.state.area);
-            todo.set('avatar', avFile);
-            todo.set('album', avFile1);
-            todo.save().then(function() {
-                ToastAndroid.show('上传成功', ToastAndroid.SHORT);
-                navigation.goBack(null);
-                // 保存成功
-            }, function(error) {
-                alert(JSON.stringify(error));
-                //保存失败
-                // alert(error)
-            });
-        }).catch(err => {
-            console.warn(err.message);
-            switch (err.name) {
-                case 'NotFoundError':
-                    // TODO;
-                    break;
-                case 'ExpiredError':
-                    // TODO
-                    break;
-            }
-        });
+        }
+
     }
 
-    componentDidMount() {
-        Tong.load({
-            key:'User',
-            autoSync: true,
-            syncInBackground: true
-        }).then(ret => {
-            this.setState({id:ret.id});
-            console.log(ret.id);
-        }).catch(err => {
-            console.warn(err.message);
-            switch (err.name) {
-                case 'NotFoundError':
-                    // TODO;
-                    break;
-                case 'ExpiredError':
-                    // TODO
-                    break;
-            }
-        });
-    }
+
     selectPhotoTapped1() {
         const options = {
             quality: 1.0,
@@ -188,6 +208,8 @@ export default class UserSet extends Component{
                 this.setState({
                     avatarSource1: source,
                     IMAGE1:response.data,
+                    images1: false,
+
                 });
             }
         });
@@ -226,10 +248,13 @@ export default class UserSet extends Component{
                 } else {
                     source = {uri: response.uri.replace('file://', ''), isStatic: true};
                 }
+                console.log('source = ', source);
 
                 this.setState({
                     avatarSource: source,
                     IMAGE:response.data,
+                    images: false,
+
                 });
             }
         });
@@ -260,8 +285,13 @@ export default class UserSet extends Component{
                         <TouchableOpacity style={{alignItems: 'center',justifyContent: 'center',backgroundColor:color.littlegray,
                                  marginRight:10,height:60,width:60,borderRadius:1}}
                                           onPress={this.selectPhotoTapped.bind(this)}>
-                            <Image source={require('../../img/picture.png')} style={{height:30,width:30,resizeMode: 'stretch',}}/>
-                            <Text style={{color:'#666666',fontSize: 12,marginTop:5}}>{"添加图片"}</Text>
+                            {this.state.images?
+                                <View>
+                                    <Image source={require('../../img/picture.png')} style={{height:30,width:30,resizeMode: 'stretch',}}/>
+                                    <Text style={{color:'#666666',fontSize: 12,marginTop:5}}>{"添加图片"}</Text>
+                                </View>
+                            :<Image source={this.state.avatarSource} style={{height:60,width:60,resizeMode: 'stretch',}}/>
+                            }
                         </TouchableOpacity>
                     </View>
                     <View style={{height:2,backgroundColor:color.background}}/>
@@ -317,9 +347,20 @@ export default class UserSet extends Component{
                         <TouchableOpacity style={{alignItems: 'center',justifyContent: 'center',backgroundColor:color.littlegray,
                                  marginRight:10,height:60,width:60,borderRadius:1}}
                                           onPress={this.selectPhotoTapped1.bind(this)}>
-                            <Image source={require('../../img/picture.png')} style={{height:30,width:30,resizeMode: 'stretch',}}/>
-                            <Text style={{color:'#666666',fontSize: 12,marginTop:5}}>{"添加图片"}</Text>
+                            {this.state.images1?
+                                <View>
+                                    <Image source={require('../../img/picture.png')} style={{height:30,width:30,resizeMode: 'stretch',}}/>
+                                    <Text style={{color:'#666666',fontSize: 12,marginTop:5}}>{"添加图片"}</Text>
+                                </View>
+                                :<Image source={this.state.avatarSource1} style={{height:60,width:60,resizeMode: 'stretch',}}/>
+                            }
                         </TouchableOpacity>
+                        {/*<TouchableOpacity style={{alignItems: 'center',justifyContent: 'center',backgroundColor:color.littlegray,*/}
+                                 {/*marginRight:10,height:60,width:60,borderRadius:1}}*/}
+                                          {/*onPress={this.selectPhotoTapped1.bind(this)}>*/}
+                            {/*<Image source={require('../../img/picture.png')} style={{height:30,width:30,resizeMode: 'stretch',}}/>*/}
+                            {/*<Text style={{color:'#666666',fontSize: 12,marginTop:5}}>{"添加图片"}</Text>*/}
+                        {/*</TouchableOpacity>*/}
                     </View>
                     <View style={{height:2,backgroundColor:color.border}}/>
 

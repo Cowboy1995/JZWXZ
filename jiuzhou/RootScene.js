@@ -36,6 +36,7 @@ import ContactScene from './page/Contact/ContactScene';
 import ContactDetail from './page/Contact/ContactDetail';
 import DeatailMoments from './page/Contact/DeatailMoments';
 
+
 import WikiScene from './page/Wiki/WikiScene';
 import NewWiki from './page/Wiki/NewWiki';
 import MyWiki from './page/Wiki/MyWiki';
@@ -48,6 +49,7 @@ import NewMoments from './page/Moments/NewMoments';
 import MineScene from './page/Mine/MineScene';
 import UserSet from './page/Mine/UserSet';
 import AddFriend from './page/Mine/AddFriend';
+import MyDetail from './page/Mine/MyDetail';
 
 
 class YinDao extends Component {
@@ -188,6 +190,7 @@ const Navigator = StackNavigator(
         SetWiki:{ screen:SetWiki },
         UserSet:{ screen:UserSet },
         AddFriend:{ screen:AddFriend },
+        MyDetail:{ screen:MyDetail },
 
 
         MyApp:{ screen:MyApp },

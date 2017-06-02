@@ -94,6 +94,8 @@ export default class MyWiki extends Component {
             query.find().then(function (products) {
                 console.log(products);
                 details=products;
+                this.setState({ isRefreshing: false });
+
                 // 查询到商品后，在前端展示到相应的位置中。
             }).catch(function(error) {
                 alert(JSON.stringify(error));
@@ -129,6 +131,8 @@ export default class MyWiki extends Component {
             query.find().then(function (products) {
                 console.log(products);
                 details=products;
+                this.setState({ isRefreshing: false })
+
                 // this.setState({
                 //     isRefreshing:false
                 // })

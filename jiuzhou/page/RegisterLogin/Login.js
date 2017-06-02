@@ -69,17 +69,36 @@ export default class Login extends Component {
             AV.User.logIn(this.state.USERNAME, this.state.PASSWORD).then(function (loginedUser) {
                 //调用AV.User.logIn方法进行帐号密码登陆
                 const {id}=loginedUser;
-                console.log(id);
+                let detail=loginedUser;
+                console.log(detail.createdAt.toLocaleString());
+                let query1 = new AV.Query('friend');
+                query1.equalTo('myid', id);
+                query1.select(['fid']);
+                query1.first().then(function (data) {
+                    let fid = data.get('fid');
+                    console.log(fid);
+                    let newquery = new AV.Query('moments');
+                    newquery.containedIn('mid', fid);
+                    newquery.descending('createdAt');
+                    newquery.find().then(function (result) {
+                        Tong.save({
+                            key: 'moment',  // 注意:请不要在key中使用_下划线符号!
+                            data: {
+                                date:result,
+                            },
+                        })
+                    });
+                })
                 let query = new AV.Query('friend');
                 query.equalTo('myid', id);
                 query.select(['cid']);
                 query.first().then(function (data) {
                     let cid=data.get('cid');
-                    console.log(cid);
+                    // console.log(cid);
                     let newquery = new AV.Query('_User');
                     newquery.containedIn('objectId', cid);
                     newquery.find().then(function (aaa) {
-                        console.log(aaa);
+                        // console.log(aaa);
 
                         Tong.save({
                             key: 'contact',  // 注意:请不要在key中使用_下划线符号!
@@ -93,13 +112,14 @@ export default class Login extends Component {
                 Tong.save({
                     key: 'User',  // 注意:请不要在key中使用_下划线符号!
                     data: {
+                        detail:detail,
                         id:id,
                     },
                 }).then(()=>{
                     let query = new AV.Query('friend');
                     query.equalTo('myid', id);
                     query.find(function (result) {
-                        console.log(result);
+                        // console.log(result);
                         const {id}=result;
                         Tong.save({
                             key: 'friend',  // 注意:请不要在key中使用_下划线符号!

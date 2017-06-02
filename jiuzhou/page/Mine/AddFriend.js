@@ -67,40 +67,47 @@ export default class AddFriend extends Component{
 
     addFriend=()=>{
         const  navigation = this.props.navigation;
-        Tong.load({
-            key:'friend',
-            autoSync: true,
-            syncInBackground: true
-        }).then(ret => {
-            id=ret.id;
-            console.log(id);
-            let query = new AV.Query('_User');
-            query.equalTo('mobilePhoneNumber', this.state.phone);
-            query.find().then(function (result) {
-                // 第一个参数是 className，第二个参数是 objectId
-                console.log(result);
-                let todo = AV.Object.createWithoutData('friend', id);
-                // 修改属性
-                todo.addUnique('fid', result[0].id);
-                todo.addUnique('cid', result[0].id);
-                // 保存到云端
-                todo.save().then(function () {
-                    navigation.goBack(null);
-                    ToastAndroid.show('添加成功', ToastAndroid.SHORT);
-                });
-            })
-        }).catch(err => {
-            console.warn(err.message);
-            switch (err.name) {
-                case 'NotFoundError':
-                    // TODO;
-                    break;
-                case 'ExpiredError':
-                    // TODO
-                    break;
-            }
-        });
-
+        if(this.state.phone.length===0){
+            ToastAndroid.show('请输入对方的手机号', ToastAndroid.SHORT);
+            //判断用户名是否为空，为空提示用户输入用户名
+        }else if(this.state.phone.length!==11){
+            ToastAndroid.show('请输入正确的手机号', ToastAndroid.SHORT);
+            //判断手机号是否为11位，为空提示用户输入正确的手机号
+        }else{
+            Tong.load({
+                key:'friend',
+                autoSync: true,
+                syncInBackground: true
+            }).then(ret => {
+                id=ret.id;
+                console.log(id);
+                let query = new AV.Query('_User');
+                query.equalTo('mobilePhoneNumber', this.state.phone);
+                query.find().then(function (result) {
+                    // 第一个参数是 className，第二个参数是 objectId
+                    console.log(result);
+                    let todo = AV.Object.createWithoutData('friend', id);
+                    // 修改属性
+                    todo.addUnique('fid', result[0].id);
+                    todo.addUnique('cid', result[0].id);
+                    // 保存到云端
+                    todo.save().then(function () {
+                        navigation.goBack(null);
+                        ToastAndroid.show('添加成功', ToastAndroid.SHORT);
+                    });
+                })
+            }).catch(err => {
+                console.warn(err.message);
+                switch (err.name) {
+                    case 'NotFoundError':
+                        // TODO;
+                        break;
+                    case 'ExpiredError':
+                        // TODO
+                        break;
+                }
+            });
+        }
     }
 
     render() {

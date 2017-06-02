@@ -134,6 +134,9 @@ if (!__DEV__) {
 // AppRegistry.registerComponent('MeiTuan', () => MeiTuan);
 
 //默认应用的容器组件
+const currentTimestamp = new Date();
+console.log(currentTimestamp);
+
 class App extends Component {
     render(){
         return(

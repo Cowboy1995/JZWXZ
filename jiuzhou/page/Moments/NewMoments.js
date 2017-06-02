@@ -57,6 +57,9 @@ export default class NewMoments extends Component {
                 />
             </TouchableOpacity>
         ),
+        headerTitle: (
+            <Text style={{color:'white',fontSize:16,marginLeft:10}}>发表说说</Text>
+        ),
         headerRight:(
             <TouchableOpacity style={{alignItems: 'center',justifyContent: 'center',backgroundColor:color.LightBlack,
             marginRight:5,height:30,width:60,borderRadius:1}}>
@@ -78,9 +81,7 @@ export default class NewMoments extends Component {
 
     }
     componentDidMount(){
-        this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(data),
-        });
+
     }
 
     render() {
